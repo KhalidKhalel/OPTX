@@ -34,9 +34,9 @@
 
 ## 🎯 What is OPTX?
 
-<p align="center">
-  <img src="https://readme-typing-svg.demolab.com/?lines=OPTX+-+Online+Privacy+Tool+eXtractor;An+OSINT+assistant+to+help+you+understand;and+manage+your+digital+footprint.;---;My+Mission:+Privacy+is+a+fundamental+right.;OPTX+gives+you+the+tools+to+see+what+the;internet+knows+about+you+and+the+path;to+removal+-+completely+for+free.&font=Fira%20Code&center=true&width=800&height=120&color=01FFFF&vCenter=true&pause=1000000&size=16&duration=1&background=1A1B27" />
-</p>
+**OPTX** stands for **O**nline **P**rivacy **T**ool e**X**tractor — an Open Source Intelligence (OSINT) assistant designed to help you understand and manage your digital footprint.
+
+> 💜 **My Mission:** Privacy is a fundamental right. OPTX gives you the tools to see what the internet knows about you and the path to removal — **completely for free**.
 
 ### What OPTX Does
 
@@ -65,7 +65,108 @@
 
 ---
 
-## 🚀 Quick Start
+## 📋 Requirements
+
+- **Python 3.11+**
+- **Make** (see installation below if needed)
+
+---
+
+## 🚀 Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/KhalidKhalel/OPTX.git
+```
+
+```bash
+cd OPTX
+```
+
+### 2. Install & Run
+
+```bash
+# Install dependencies
+make install
+
+# Start OPTX server
+make run
+
+# Open http://localhost:3000
+```
+
+---
+
+### 3. Install Make (if needed)
+
+If you get `make: command not found`, follow the instructions for your operating system:
+
+---
+
+##  macOS
+
+**Option 1: Xcode Command Line Tools** (Recommended)
+
+```bash
+xcode-select --install
+```
+
+A popup will appear - click "Install" and wait for it to complete.
+
+**Option 2: Using Homebrew**
+
+```bash
+brew install make
+```
+
+---
+
+## ⊞ Windows
+
+**Option 1: Git Bash** (Easiest - Recommended)
+
+If you have Git installed, you already have Git Bash!
+
+1. Open VS Code
+2. Open the terminal (`` Ctrl+` `` or View → Terminal)
+3. Click the dropdown arrow next to the `+` button in the terminal
+4. Select **"Git Bash"**
+5. Set it as default: Click dropdown → "Select Default Profile" → "Git Bash"
+
+Done! Now you can run all `make` commands.
+
+**Option 2: Install Make with Chocolatey**
+
+1. Open PowerShell as **Administrator** (right-click → "Run as Administrator")
+
+2. Install Chocolatey:
+
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+```
+
+3. Close and reopen PowerShell as Administrator
+
+4. Install Make:
+
+```powershell
+choco install make
+```
+
+5. **Important:** Restart VS Code completely for the changes to take effect
+
+---
+
+### ✅ Verify Make Installation
+
+```bash
+make --version
+```
+
+---
+
+## 🏃 Quick Start
 
 ```bash
 # 1. Install dependencies
@@ -183,20 +284,31 @@ WIT_AI_SERVER_TOKEN=your-token
 - Create an account and get your Server Access Token
 - Note: The free CAPTCHA solver does not always work. Sometimes you may need to solve CAPTCHAs manually.
 
-### ⚡ Hyperbrowser Plans
+### 🤖 About CAPTCHA Solving
 
-For 100% hands-free automation with no manual CAPTCHA solving, you need the **Startup Plan ($30/month)**:
+The free CAPTCHA solver (wit.ai) works for many sites, but not all. Some CAPTCHAs may require manual solving.
 
-| Feature | What It Does |
-|---------|--------------|
-| **Auto CAPTCHA Solving** | Solves all CAPTCHAs automatically. Run OPTX with one command and walk away. |
-| **Proxy Usage** | Rotates your IP address so sites can't detect/block you. |
-| **25 Concurrent Browsers** | Remove data from multiple sites at once, much faster. |
-| 30 Day Data Retention | Keep logs for debugging |
-| Basic Stealth Mode | Harder for sites to detect automation |
+**Coming Soon:** Integrations with paid CAPTCHA solvers for those who want 100% automation:
+- [Capsolver](https://docs.capsolver.com/en/pricing/)
+- [2Captcha](https://2captcha.com/pricing)
+- [NopeCHA](https://nopecha.com/pricing)
 
 > [!NOTE]
-> I am NOT sponsored by Hyperbrowser. This is just what works best for full automation.
+> These services are NOT integrated yet, but will be added soon!
+
+### ⚡ Optional: Hyperbrowser Upgrade
+
+OPTX works with Hyperbrowser's **free tier**. If you want more power, their paid plan ($30/month) adds:
+
+| Feature | Benefit |
+|---------|---------|
+| **Auto CAPTCHA Solving** | No manual solving needed |
+| **Proxy Rotation** | Avoid IP blocks and detection |
+| **25 Browser Tabs** | Process multiple sites at once |
+| **Stealth Mode** | Harder for sites to detect automation |
+
+> [!NOTE]
+> I am NOT sponsored by Hyperbrowser. This is just an option if you want full automation.
 
 ---
 
