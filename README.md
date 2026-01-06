@@ -254,7 +254,12 @@ OPTX/
 Create `.env` in the project root:
 
 ```env
-# Browser Automation (for auto opt-out)
+# Browserless (FREE CAPTCHA solving + residential proxies) - RECOMMENDED
+# Get your key at: https://www.browserless.io
+BROWSERLESS_API_KEY=your-key
+
+# OR use Hyperbrowser (alternative browser automation)
+# Get your key at: https://app.hyperbrowser.ai
 HYPERBROWSER_API_KEY=hb_your-key
 
 # LLM for Chat and Vision (get key from OpenRouter)
@@ -274,21 +279,28 @@ WIT_AI_SERVER_TOKEN=your-token
 - I recommend connecting with your GitHub account for easy signup
 - Copy your API key and paste it as `LLM_API_KEY`
 
-**2. Hyperbrowser (for Browser Automation)**
+**2. Browserless (for CAPTCHA Solving + Proxies) - RECOMMENDED**
+- Go to [browserless.io](https://www.browserless.io)
+- Sign up for free (no credit card required)
+- Copy your API key and paste it as `BROWSERLESS_API_KEY`
+- **Free tier includes:** 1k units/month, auto CAPTCHA solving, residential proxies
+
+**3. Hyperbrowser (Alternative Browser Automation)**
 - Go to [app.hyperbrowser.ai](https://app.hyperbrowser.ai)
 - Sign up and get your API key
-- The free tier works but has limitations (see below)
+- Alternative to Browserless if you prefer
 
-**3. wit.ai (for CAPTCHA Solving - Optional)**
+**4. wit.ai (for Backup CAPTCHA Solving - Optional)**
 - Follow this guide: [Configuring wit.ai](https://github.com/dessant/buster/wiki/Configuring-Wit.ai)
-- Create an account and get your Server Access Token
-- Note: The free CAPTCHA solver does not always work. Sometimes you may need to solve CAPTCHAs manually.
+- Only needed as backup if Browserless CAPTCHA solving fails
 
 ### 🤖 About CAPTCHA Solving
 
-The free CAPTCHA solver (wit.ai) works for many sites, but not all. Some CAPTCHAs may require manual solving.
+**With Browserless (Recommended):** CAPTCHAs are solved automatically using their built-in solver.
 
-**Coming Soon:** Integrations with paid CAPTCHA solvers for those who want 100% automation:
+**Without Browserless:** The free wit.ai solver works for many sites, but not all. Some CAPTCHAs may require manual solving.
+
+**Coming Soon:** Additional CAPTCHA solver integrations:
 - [Capsolver](https://docs.capsolver.com/en/pricing/)
 - [2Captcha](https://2captcha.com/pricing)
 - [NopeCHA](https://nopecha.com/pricing)
@@ -296,19 +308,27 @@ The free CAPTCHA solver (wit.ai) works for many sites, but not all. Some CAPTCHA
 > [!NOTE]
 > These services are NOT integrated yet, but will be added soon!
 
-### ⚡ Optional: Hyperbrowser Upgrade
+### 🌐 Browser Settings
 
-OPTX works with Hyperbrowser's **free tier**. If you want more power, their paid plan ($30/month) adds:
+Configure these in Settings > Browser Settings:
 
-| Feature | Benefit |
-|---------|---------|
-| **Auto CAPTCHA Solving** | No manual solving needed |
-| **Proxy Rotation** | Avoid IP blocks and detection |
-| **25 Browser Tabs** | Process multiple sites at once |
-| **Stealth Mode** | Harder for sites to detect automation |
+| Setting | Description | Default |
+|---------|-------------|---------|
+| **Stealth Mode** | Anti-detection & fingerprint randomization | ON |
+| **Auto CAPTCHA** | Automatically solve CAPTCHAs | ON |
+| **Residential Proxy** | Route through residential IPs (uses more units) | OFF |
+| **Human-like Mode** | Smooth mouse & typing patterns | ON |
+| **Adblock** | Block ads for faster page loads | ON |
+
+### 🗑️ Account Deletion
+
+If you want to delete your account from these services:
+
+- **Browserless:** Email [support@browserless.io](mailto:support@browserless.io) with an account deletion request
+- **Hyperbrowser:** Email [info@hyperbrowser.ai](mailto:info@hyperbrowser.ai) with an account deletion request (as stated in their [Privacy Policy](https://www.hyperbrowser.ai/privacy-policy))
 
 > [!NOTE]
-> I am NOT sponsored by Hyperbrowser. This is just an option if you want full automation.
+> I am NOT sponsored by Browserless or Hyperbrowser. For OPTX to work at its best, these are the best free options available.
 
 ---
 
