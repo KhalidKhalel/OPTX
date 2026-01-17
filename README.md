@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/DenverCoder1/readme-typing-svg">
-    <img src="https://readme-typing-svg.demolab.com/?lines=OPTX+-+Online+Privacy+Tool+eXtractor;%F0%9F%9A%A7+Coming+Soon;Protect+Your+Privacy+Online;Know+Where+Your+Data+Lives;Remove+Your+Digital+Footprint;Learn+to+Limit+Your+Online+Exposure;Made+by+Khalid+Khalel&font=Fira%20Code&center=true&width=700&height=50&color=8B5CF6&vCenter=true&pause=3000&size=24&background=1A1B27&duration=4000" />
+    <img src="https://readme-typing-svg.demolab.com/?lines=OPTX+-+Online+Privacy+Tool+eXtractor;Protect+Your+Privacy+Online;Know+Where+Your+Data+Lives;Remove+Your+Digital+Footprint;Learn+to+Limit+Your+Online+Exposure;Made+by+Khalid+Khalel&font=Fira%20Code&center=true&width=700&height=50&color=8B5CF6&vCenter=true&pause=3000&size=24&background=1A1B27&duration=4000" />
   </a>
 </p>
 
@@ -22,21 +22,11 @@
 
 <br/>
 
-<p align="center">
-  <img src="https://readme-typing-svg.demolab.com/?lines=%F0%9F%9A%A7+Under+Development+-+Core+features+working!;More+improvements+coming+soon.&font=Fira%20Code&center=true&width=800&height=50&color=FFA500&vCenter=true&pause=1000000&size=16&duration=1&background=1A1B27" />
-</p>
-
-<p align="center">
-  <img src="https://readme-typing-svg.demolab.com/?lines=%F0%9F%94%AE+Coming+Soon:+Free+proxy+rotation;to+avoid+detection+without+paid+plans.&font=Fira%20Code&center=true&width=800&height=50&color=8B5CF6&vCenter=true&pause=1000000&size=16&duration=1&background=1A1B27" />
-</p>
-
 ---
 
 ## 🎯 What is OPTX?
 
-**OPTX** stands for **O**nline **P**rivacy **T**ool e**X**tractor — an Open Source Intelligence (OSINT) assistant designed to help you understand and manage your digital footprint.
-
-> 💜 **My Mission:** Privacy is a fundamental right. OPTX gives you the tools to see what the internet knows about you and the path to removal — **completely for free**.
+**OPTX** (Online Privacy Tool eXtractor) is an Open Source Intelligence (OSINT) assistant designed to help users understand and manage their digital footprint. By providing transparent access to public telecom and data broker information, users can see exactly what information is publicly available about them.
 
 ### What OPTX Does
 
@@ -44,11 +34,12 @@
 |---------|-------------|
 | 🔍 **Phone Lookup** | Search 25+ people-search sites instantly *(more sites actively being added)* |
 | 📊 **Carrier Info** | Live carrier & rate center data from public telecom records |
-| 🤖 **AI Automation** | AI handles opt-out forms automatically, completely free |
+| 🤖 **AI Automation** | AI handles opt-out forms automatically, completely free `BETA` |
 | 🔐 **CAPTCHA Solver** | Audio CAPTCHA solving via Google Speech + wit.ai |
 | 💬 **Chat Assistant** | OPTX Assistant guides you through the removal process |
-| 🗺️ **Telecom Mapping** | Reverse-engineer phone number assignments across North America |
-| 🛡️ **Privacy Advocacy** | Direct links to data broker opt-out pages |
+
+> [!NOTE]
+> **AI Automation (BETA):** This feature is not fully functional yet and can make errors. Still under active development.
 
 ---
 
@@ -58,17 +49,6 @@
 > **API Mode**: Your chat messages are processed by OpenRouter's AI. Your personal data (name, address) for opt-outs stays local and is only used by the browser automation.
 > 
 > **Local Mode**: 100% private. Nothing leaves your machine.
-
-- ✅ **Open source** — Audit the code yourself
-- ✅ **Your control** — You decide what data to remove
-- ✅ **No tracking** — No analytics or data collection
-
----
-
-## 📋 Requirements
-
-- **Python 3.11+**
-- **Make** (see installation below if needed)
 
 ---
 
@@ -104,7 +84,7 @@ If you get `make: command not found`, follow the instructions for your operating
 
 ---
 
-##  macOS
+##  macOS
 
 **Option 1: Xcode Command Line Tools** (Recommended)
 
@@ -190,7 +170,7 @@ See which sites have your info with direct opt-out links
 
 ### 3️⃣ Remove
 - **Manual:** Click opt-out links and follow the steps yourself
-- **Auto:** AI does it automatically, completely free
+- **Auto:** AI does it automatically, completely free `BETA`
 
 ---
 
@@ -222,30 +202,18 @@ See which sites have your info with direct opt-out links
 
 ```
 OPTX/
-├── index.html          # Main UI with glitch effects
-├── style.css           # Cyberpunk-inspired styling
-├── script.js           # Frontend logic & chat interface
-├── sites.js            # 30+ data broker sites database
-├── about.html          # About page
-├── sources.html        # Data sources attribution
-├── .env                # API keys (not committed)
-├── Makefile            # Easy setup commands
+├── index.html          # Home page - phone lookup, AI chat, browser view, settings
+├── style.css           # Dark cyberpunk theme with glitch effects and animations
+├── script.js           # Chat interface, WebSocket connection, settings management
+├── sites.js            # Database of 30+ data broker sites with opt-out URLs
+├── about.html          # About OPTX - mission and features overview
+├── sources.html        # Data sources and attribution credits
+├── .env                # Your API keys (not committed to git)
+├── Makefile            # Easy commands: install, run, stop, clean, update
 └── backend/
-    ├── agent.py        # 🧠 Main server - LLM, HyperAgent, CAPTCHA
-    └── phone_lookup.py # Phone number info lookup
+    ├── agent.py        # Main server: LLM chat, browser automation, CAPTCHA solving
+    └── phone_lookup.py # Phone carrier and rate center lookups
 ```
-
----
-
-## 🎨 Website Theme
-
-| Color | Hex | Usage |
-|-------|-----|-------|
-| ![Purple](https://img.shields.io/badge/-%238B5CF6-8B5CF6?style=flat-square) Purple | `#8B5CF6` | Primary accent, headings |
-| ![Cyan](https://img.shields.io/badge/-%2301FFFF-01FFFF?style=flat-square) Cyan | `#01FFFF` | Links, highlights |
-| ![Green](https://img.shields.io/badge/-%2300FF88-00FF88?style=flat-square) Green | `#00FF88` | Success states, buttons |
-| ![Dark BG](https://img.shields.io/badge/-%231A1B27-1A1B27?style=flat-square) Dark | `#1A1B27` | Background |
-| ![Card BG](https://img.shields.io/badge/-%230D1117-0D1117?style=flat-square) Darker | `#0D1117` | Cards, containers |
 
 ---
 
@@ -254,19 +222,21 @@ OPTX/
 Create `.env` in the project root:
 
 ```env
-# Browserless (FREE CAPTCHA solving + residential proxies) - RECOMMENDED
-# Get your key at: https://www.browserless.io
+# Chatbot - Cerebras (SUPER FAST, FREE)
+# Get your key at: https://cloud.cerebras.ai
+CEREBRAS_API_KEY=csk-your-key
+CHATBOT_MODEL=llama-3.3-70b
+
+# Browser Automation - Browser-Use (FREE, handles forms automatically)
+# Get your key at: https://cloud.browser-use.com
+BROWSER_USE_API_KEY=bu_your-key
+LLM_MODEL=browser-use-llm
+
+# Cloud Browser - Browserless (FREE, CAPTCHA solving)
+# Get your key at: https://browserless.io
 BROWSERLESS_API_KEY=your-key
-
-# OR use Hyperbrowser (alternative browser automation)
-# Get your key at: https://app.hyperbrowser.ai
-HYPERBROWSER_API_KEY=hb_your-key
-
-# LLM for Chat and Vision (get key from OpenRouter)
-LLM_API_KEY=sk-or-v1-your-key
-
-# Which model to use (pick any from OpenRouter, free options available)
-LLM_MODEL=google/gemini-2.0-flash-exp:free
+BROWSERLESS_TOKEN=your-key
+BROWSERLESS_WS_URL=wss://production-sfo.browserless.io
 
 # CAPTCHA Solver backup (optional)
 WIT_AI_SERVER_TOKEN=your-token
@@ -274,61 +244,48 @@ WIT_AI_SERVER_TOKEN=your-token
 
 ### 🔑 Getting Your API Keys
 
-**1. OpenRouter (for AI Chat)**
-- Go to [openrouter.ai/keys](https://openrouter.ai/keys)
-- I recommend connecting with your GitHub account for easy signup
-- Copy your API key and paste it as `LLM_API_KEY`
+**1. Cerebras (for AI Chat) - FREE**
+- Go to [cloud.cerebras.ai](https://cloud.cerebras.ai)
+- Sign up and create an API key
+- Uses Llama 3.3 70B at ~2100 tokens/sec (super fast!)
 
-**2. Browserless (for CAPTCHA Solving + Proxies) - RECOMMENDED**
+**2. Browser-Use (for Browser Automation) - FREE**
+- Go to [cloud.browser-use.com](https://cloud.browser-use.com)
+- Get 1000 free steps to start
+- Handles form filling with vision AI
+
+**3. Browserless (for Cloud Browser + CAPTCHA) - FREE**
 - Go to [browserless.io](https://www.browserless.io)
 - Sign up for free (no credit card required)
-- Copy your API key and paste it as `BROWSERLESS_API_KEY`
-- **Free tier includes:** 1k units/month, auto CAPTCHA solving, residential proxies
-
-**3. Hyperbrowser (Alternative Browser Automation)**
-- Go to [app.hyperbrowser.ai](https://app.hyperbrowser.ai)
-- Sign up and get your API key
-- Alternative to Browserless if you prefer
+- **Free tier includes:** 1k units/month, auto CAPTCHA solving
 
 **4. wit.ai (for Backup CAPTCHA Solving - Optional)**
 - Follow this guide: [Configuring wit.ai](https://github.com/dessant/buster/wiki/Configuring-Wit.ai)
 - Only needed as backup if Browserless CAPTCHA solving fails
 
-### 🤖 About CAPTCHA Solving
+### 🌐 Browser Provider & Settings
 
-**With Browserless (Recommended):** CAPTCHAs are solved automatically using their built-in solver.
+OPTX uses **Browserless** for cloud browser automation. Configure in Settings > Browser:
 
-**Without Browserless:** The free wit.ai solver works for many sites, but not all. Some CAPTCHAs may require manual solving.
+#### Browserless Features
+Full-featured cloud browser with these **free features**:
 
-**Coming Soon:** Additional CAPTCHA solver integrations:
-- [Capsolver](https://docs.capsolver.com/en/pricing/)
-- [2Captcha](https://2captcha.com/pricing)
-- [NopeCHA](https://nopecha.com/pricing)
-
-> [!NOTE]
-> These services are NOT integrated yet, but will be added soon!
-
-### 🌐 Browser Settings
-
-Configure these in Settings > Browser Settings:
-
-| Setting | Description | Default |
-|---------|-------------|---------|
-| **Stealth Mode** | Anti-detection & fingerprint randomization | ON |
-| **Auto CAPTCHA** | Automatically solve CAPTCHAs | ON |
-| **Residential Proxy** | Route through residential IPs (uses more units) | OFF |
-| **Human-like Mode** | Smooth mouse & typing patterns | ON |
-| **Adblock** | Block ads for faster page loads | ON |
+| Feature | Description |
+|---------|-------------|
+| **Stealth Mode** | Anti-detection & fingerprint randomization |
+| **Auto CAPTCHA** | Automatically solve CAPTCHAs |
+| **Residential Proxy** | Route through residential IPs (uses more units) |
+| **Human-like Mode** | Smooth mouse & typing patterns |
+| **Adblock** | Block ads for faster page loads |
 
 ### 🗑️ Account Deletion
 
-If you want to delete your account from these services:
+If you want to delete your Browserless account:
 
-- **Browserless:** Email [support@browserless.io](mailto:support@browserless.io) with an account deletion request
-- **Hyperbrowser:** Email [info@hyperbrowser.ai](mailto:info@hyperbrowser.ai) with an account deletion request (as stated in their [Privacy Policy](https://www.hyperbrowser.ai/privacy-policy))
+- Email [support@browserless.io](mailto:support@browserless.io) with an account deletion request
 
 > [!NOTE]
-> I am NOT sponsored by Browserless or Hyperbrowser. For OPTX to work at its best, these are the best free options available.
+> I am NOT sponsored by Browserless. For OPTX to work at its best, this is the best free option available.
 
 ---
 
