@@ -53,6 +53,59 @@ OPTX specifically targets **people search sites** — data brokers that trade pe
 
 ---
 
+## 🧠 How the Agent "Thinks"
+
+OPTX isn't just a script—it's a **smart agent** that uses AI to navigate websites like a human would. Here's how it works:
+
+### The Observer-Actor Loop
+
+The agent doesn't follow a static list of commands. Instead, it runs a continuous loop:
+
+1. **Observe**: "Look" at the page by getting the DOM (the structural map) and taking a screenshot.
+2. **Reason**: An AI vision model analyzes the page. It recognizes things like "that looks like a search bar" or "this button starts the removal process."
+3. **Act**: Based on reasoning, it decides the next step (click a link, fill a field, solve a CAPTCHA).
+4. **Verify**: After acting, it checks the result. If something unexpected happens (like a popup), it adjusts on the fly.
+
+### Semantic Understanding
+
+The agent understands **intent**, not just code. If a site changes its button from "Delete" to "Remove my data," a normal script would break. But because the AI can "read" text and understand context, it knows both mean the same thing.
+
+### Vision & Structure
+
+The agent combines **visual layout** (what a person sees) with **structural data** (the DOM code). This allows it to navigate menus, handle CAPTCHAs, and steer through "dark patterns" (the tricky ways sites hide their opt-out forms).
+
+---
+
+## 🏗️ Architecture: What Runs Where
+
+| Capability | How It Works |
+|------------|--------------|
+| ✅ **Observer-Actor Loop** | Your code observes (screenshots, DOM) and acts (click, fill). The *reasoning* is handled by Browser-Use API. |
+| ✅ **Semantic Understanding** | Provided by Browser-Use API via the vision model. It understands intent, not just exact selectors. |
+| ✅ **Vision & Structure** | Browser-Use combines vision (seeing the page) with DOM structure (reading the code). |
+| ❌ **Sub-Agents for Research** | Not included. OPTX runs one task at a time (perfect for opt-outs). |
+
+### Code Distribution
+
+| Part | Where it runs |
+|------|---------------|
+| Browser control (Playwright) | **Your code** (local) |
+| Site-specific opt-out logic | **Your code** (local) |
+| Chatbot persona | Cerebras **API** (cloud) |
+| Smart reasoning / vision | Browser-Use **API** (cloud) |
+
+### What's in `agent.py`:
+- **Automation logic**: Navigating to URLs, filling forms, clicking buttons, taking screenshots.
+- **Site-specific handlers**: Custom flows for Nuwber, 411.info, ThatsThem, etc.
+- **Chatbot persona**: How the bot talks to users (powered by Cerebras API).
+
+### What's handled by Browser-Use API:
+- **Reasoning**: When the agent needs to figure out *which* button to click, that intelligence is provided by Browser-Use's cloud model (`browser-use-llm`).
+- **Vision**: It can "see" screenshots and understand what's on the page.
+- **Decision-making**: It decides the next action based on visual and structural data.
+
+---
+
 ## 🔒 Privacy
 
 > [!NOTE]
@@ -154,6 +207,8 @@ make --version
 
 ---
 
+## 🎮 How It Works
+
 ### 1️⃣ Search
 Enter a phone number → OPTX checks **40+** data broker sites (new ones added daily).
 
@@ -233,7 +288,7 @@ BROWSERLESS_WS_URL=wss://production-sfo.browserless.io
 WIT_AI_SERVER_TOKEN=your-token
 ```
 
-### � Getting Your API Keys
+### 🔑 Getting Your API Keys
 
 **1. Cerebras (Brain) - 100% FREE**
 - Uses **zai-glm-4.7** at incredible speeds via Cerebras.
