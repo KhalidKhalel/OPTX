@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/DenverCoder1/readme-typing-svg">
-    <img src="https://readme-typing-svg.demolab.com/?lines=OPTX+-+Online+Privacy+Tool+eXtractor;Protect+Your+Privacy+Online;Know+Where+Your+Data+Lives;Remove+Your+Digital+Footprint;Learn+to+Limit+Your+Online+Exposure;Made+by+Khalid+Khalel&font=Fira%20Code&center=true&width=700&height=50&color=8B5CF6&vCenter=true&pause=3000&size=24&background=1A1B27&duration=4000" />
+    <img src="https://readme-typing-svg.demolab.com/?lines=OPTX+-+Online+Privacy+Tool+eXtractor;Fully+Agentic+Mode;Protect+Your+Privacy+Online;Know+Where+Your+Data+Lives;Remove+Your+Digital+Footprint;Learn+to+Limit+Your+Online+Exposure;Made+by+Khalid+Khalel&font=Fira%20Code&center=true&width=700&height=50&color=8B5CF6&vCenter=true&pause=3000&size=24&background=1A1B27&duration=4000" />
   </a>
 </p>
 
@@ -28,25 +28,35 @@
 
 **OPTX** (Online Privacy Tool eXtractor) is an Open Source Intelligence (OSINT) assistant designed to help users understand and manage their digital footprint. By providing transparent access to public telecom and data broker information, users can see exactly what information is publicly available about them.
 
-### What OPTX Does
+### 🔍 People Search Sites
+
+OPTX specifically targets **people search sites** — data brokers that trade personal information for profit. These sites collect and expose names, addresses, phone numbers, relatives, and more.
+
+**Why this matters:** Exposed personal data puts you at risk of:
+- Unwanted marketing and spam
+- Identity theft and financial hacks
+- Account takeovers
+- Robocalls and phone scams
+- Stalking, harassment, and doxing
+
+> [!NOTE]
+> OPTX does **not** target employment verification sites or employer background check services — only people search sites that expose your personal info publicly.
 
 | Feature | Description |
 |---------|-------------|
-| 🔍 **Phone Lookup** | Search 25+ people-search sites instantly *(more sites actively being added)* |
+| 🔍 **Phone Lookup** | Search **40+** people-search sites instantly (more added daily) |
 | 📊 **Carrier Info** | Live carrier & rate center data from public telecom records |
-| 🤖 **AI Automation** | AI handles opt-out forms automatically, completely free `BETA` |
-| 🔐 **CAPTCHA Solver** | Audio CAPTCHA solving via Google Speech + wit.ai |
-| 💬 **Chat Assistant** | OPTX Assistant guides you through the removal process |
-
-> [!NOTE]
-> **AI Automation (BETA):** This feature is not fully functional yet and can make errors. Still under active development.
+| 🧠 **Agent Mode** | **Truly Agentic**: AI "thinks" & navigates sites dynamically like a human |
+| 📺 **Live Preview** | Watch the AI reason and act in real-time through the browser window |
+| 🔐 **CAPTCHA Solver** | Intelligent handling of bot-checks using vision and audio |
+| 💬 **AI Assistant** | Learn about data exposure, proactive protection strategies, and initiate intelligent, automatic removals through natural conversation. |
 
 ---
 
 ## 🔒 Privacy
 
 > [!NOTE]
-> **API Mode**: Your chat messages are processed by OpenRouter's AI. Your personal data (name, address) for opt-outs stays local and is only used by the browser automation.
+> **API Mode**: Your chat messages are processed by Cerebras AI (zai-glm-4.7). Your personal data (name, address) for opt-outs stays local and is only used by the browser automation.
 > 
 > **Local Mode**: 100% private. Nothing leaves your machine.
 
@@ -67,14 +77,12 @@ cd OPTX
 ### 2. Install & Run
 
 ```bash
-# Install dependencies
-make install
-
-# Start OPTX server
-make run
-
-# Open http://localhost:3000
+# Verify environment & start server
+make
 ```
+
+> [!NOTE]
+> The `make` command handles everything: it creates a virtual environment, installs dependencies, and starts the server on [http://localhost:3000](http://localhost:3000).
 
 ---
 
@@ -146,31 +154,15 @@ make --version
 
 ---
 
-## 🏃 Quick Start
-
-```bash
-# 1. Install dependencies
-make install
-
-# 2. Start OPTX server
-make run
-
-# 3. Open http://localhost:3000
-```
-
----
-
-## 🎮 How It Works
-
 ### 1️⃣ Search
-Enter a phone number → OPTX checks 25+ data broker sites *(more sites actively being added)*
+Enter a phone number → OPTX checks **40+** data broker sites (new ones added daily).
 
 ### 2️⃣ Review
-See which sites have your info with direct opt-out links
+See which sites have your info with direct links to their opt-out forms.
 
-### 3️⃣ Remove
-- **Manual:** Click opt-out links and follow the steps yourself
-- **Auto:** AI does it automatically, completely free `BETA`
+### 3️⃣ Remove (True Agent Mode)
+- **Manual:** Click the links and follow the steps yourself.
+- **Intelligent Agent:** The bot doesn't follow a script; it dynamically observes the page, reasons about where to click, fills forms, and solves puzzles just like a human—meaning every run is unique. You can watch the whole process live in the **Browser Preview**.
 
 ---
 
@@ -178,10 +170,9 @@ See which sites have your info with direct opt-out links
 
 | Command | Description |
 |---------|-------------|
-| `make install` | Install Python dependencies |
-| `make run` | Start server at localhost:3000 |
-| `make stop` | Stop the server |
+| `make` | Install dependencies & start server at localhost:3000 |
 | `make update` | Pull latest changes and update dependencies |
+| `make stop` | Stop the server |
 | `make clean` | Remove venv and cache |
 
 ---
@@ -200,16 +191,16 @@ See which sites have your info with direct opt-out links
 
 ## 📁 Project Structure
 
+OPTX is a **Single Page Application (SPA)** - all views are in one HTML file with JavaScript routing.
+
 ```
 OPTX/
-├── index.html          # Home page - phone lookup, AI chat, browser view, settings
+├── index.html          # Main SPA - all views (search, protect, sources, about)
 ├── style.css           # Dark cyberpunk theme with glitch effects and animations
 ├── script.js           # Chat interface, WebSocket connection, settings management
-├── sites.js            # Database of 30+ data broker sites with opt-out URLs
-├── about.html          # About OPTX - mission and features overview
-├── sources.html        # Data sources and attribution credits
+├── sites.js            # Database of 40+ data broker sites with opt-out URLs
 ├── .env                # Your API keys (not committed to git)
-├── Makefile            # Easy commands: install, run, stop, clean, update
+├── Makefile            # Easy commands: make, update, clean
 └── backend/
     ├── agent.py        # Main server: LLM chat, browser automation, CAPTCHA solving
     └── phone_lookup.py # Phone carrier and rate center lookups
@@ -225,12 +216,12 @@ Create `.env` in the project root:
 # Chatbot - Cerebras (SUPER FAST, FREE)
 # Get your key at: https://cloud.cerebras.ai
 CEREBRAS_API_KEY=csk-your-key
-CHATBOT_MODEL=llama-3.3-70b
+CHATBOT_MODEL=zai-glm-4.7
 
 # Browser Automation - Browser-Use (FREE, handles forms automatically)
 # Get your key at: https://cloud.browser-use.com
 BROWSER_USE_API_KEY=bu_your-key
-LLM_MODEL=browser-use-llm
+VISION_MODEL=browser-use-llm
 
 # Cloud Browser - Browserless (FREE, CAPTCHA solving)
 # Get your key at: https://browserless.io
@@ -238,54 +229,39 @@ BROWSERLESS_API_KEY=your-key
 BROWSERLESS_TOKEN=your-key
 BROWSERLESS_WS_URL=wss://production-sfo.browserless.io
 
-# CAPTCHA Solver backup (optional)
+# CAPTCHA Solver (Audio) - Optional but useful for complex bots
 WIT_AI_SERVER_TOKEN=your-token
 ```
 
-### 🔑 Getting Your API Keys
+### � Getting Your API Keys
 
-**1. Cerebras (for AI Chat) - FREE**
-- Go to [cloud.cerebras.ai](https://cloud.cerebras.ai)
-- Sign up and create an API key
-- Uses Llama 3.3 70B at ~2100 tokens/sec (super fast!)
+**1. Cerebras (Brain) - 100% FREE**
+- Uses **zai-glm-4.7** at incredible speeds via Cerebras.
+- Sign up at [cloud.cerebras.ai](https://cloud.cerebras.ai).
 
-**2. Browser-Use (for Browser Automation) - FREE**
-- Go to [cloud.browser-use.com](https://cloud.browser-use.com)
-- Get 1000 free steps to start
-- Handles form filling with vision AI
+**2. Browser-Use (Eyes & Hands) - FREE Tier**
+- Advanced reasoning engine that sees the page like you do.
+- Get free monthly steps at [cloud.browser-use.com](https://cloud.browser-use.com).
 
-**3. Browserless (for Cloud Browser + CAPTCHA) - FREE**
-- Go to [browserless.io](https://www.browserless.io)
-- Sign up for free (no credit card required)
-- **Free tier includes:** 1k units/month, auto CAPTCHA solving
+**3. Browserless (The Browser) - FREE Tier**
+- Full-featured cloud browser with anti-detection and CAPTCHA solving.
+- Sign up at [browserless.io](https://www.browserless.io).
+- **Stealth & CAPTCHA**: Provides comprehensive handling through both passive detection and programmatic solving. Many CAPTCHAs are prevented altogether by using the `/stealth` route, which hides signs of automation using advanced anti-detection techniques.
 
-**4. wit.ai (for Backup CAPTCHA Solving - Optional)**
-- Follow this guide: [Configuring wit.ai](https://github.com/dessant/buster/wiki/Configuring-Wit.ai)
-- Only needed as backup if Browserless CAPTCHA solving fails
+**4. CAPTCHA Solver (Audio) - 100% FREE**
+- Optional but recommended for audio-based reCAPTCHA solving.
+- [Wit.ai](https://wit.ai) | [GitHub](https://github.com/dessant/buster) | [Buster Config Guide](https://github.com/dessant/buster/wiki/Configuring-Buster-for-Wit.ai)
 
-### 🌐 Browser Provider & Settings
+### 🗑️ Account Deletion (Your Rights)
 
-OPTX uses **Browserless** for cloud browser automation. Configure in Settings > Browser:
+If you wish to close your accounts and delete your data from the services used by OPTX, you can do so by contacting their respective support teams as per their privacy policies:
 
-#### Browserless Features
-Full-featured cloud browser with these **free features**:
+*   **Cerebras (Brain)**: Email `privacy@cerebras.ai` to request deletion of your `cloud.cerebras.ai` account. [Privacy Policy](https://www.cerebras.ai/privacy-policy)
+*   **Browserless (The Browser)**: Email `support@browserless.io` to request account closure and data deletion. [Privacy Policy](https://www.browserless.io/privacy-policy)
+*   **Browser-Use (Eyes & Hands)**: Email `support@browser-use.com` to request permanent account deletion. [Privacy Policy](https://browser-use.com/privacy)
 
-| Feature | Description |
-|---------|-------------|
-| **Stealth Mode** | Anti-detection & fingerprint randomization |
-| **Auto CAPTCHA** | Automatically solve CAPTCHAs |
-| **Residential Proxy** | Route through residential IPs (uses more units) |
-| **Human-like Mode** | Smooth mouse & typing patterns |
-| **Adblock** | Block ads for faster page loads |
-
-### 🗑️ Account Deletion
-
-If you want to delete your Browserless account:
-
-- Email [support@browserless.io](mailto:support@browserless.io) with an account deletion request
-
-> [!NOTE]
-> I am NOT sponsored by Browserless. For OPTX to work at its best, this is the best free option available.
+> [!TIP]
+> **Why is it free?** OPTX leverages the generous free tiers of best-in-class privacy and AI infrastructure. You get professional-grade removal tools without a monthly subscription.
 
 ---
 
