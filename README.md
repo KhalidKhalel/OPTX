@@ -106,10 +106,34 @@ The agent combines **visual layout** (what a person sees) with **structural data
 
 ---
 
-## 🔒 Privacy
+## 🔒 Privacy & Data Protection
 
-> [!NOTE]
-> **API Mode**: Your chat messages are processed by Cerebras AI (zai-glm-4.7). Your personal data (name, address) for opt-outs stays local and is only used by the browser automation.
+### How Your Personal Info is Protected
+
+OPTX uses Browser-Use's **`sensitive_data`** feature to protect your personal information during automated opt-outs.
+
+| Your Data | Where It's Stored | Sent to AI? |
+|-----------|-------------------|-------------|
+| **Name, Address, Phone, DOB** | Local browser only | ❌ **No** - AI sees placeholders like `{first_name}` |
+| **API Keys** | `.env` file (local) | ❌ **No** - Never leaves your machine |
+| **Chat Messages** | Sent to Cerebras | ⚠️ **Yes** - Required for AI responses |
+| **Browser Screenshots** | Sent to Browser-Use | ⚠️ **Yes** - AI needs to "see" pages |
+
+### How `sensitive_data` Works
+
+When you enter your personal info in Settings → Your Info, it's stored **locally** in your browser. During opt-outs, the AI only sees placeholders:
+
+```
+AI sees: "Fill form with {first_name} {last_name} at {street}, {city} {state}"
+AI never sees: "Fill form with John Doe at 123 Main St, Austin TX"
+```
+
+The actual values are filled in **locally** by the browser automation, not by the AI.
+
+> [!IMPORTANT]
+> **AI Context & Protection**:
+> - **Conversational Awareness**: Your information (Name, Email, Phone, Address, etc.) is used to enrich the AI chatbot's context. This allows it to acknowledge who you are and what data it's helping you protect (e.g., "I see your email is example@test.com, let's look for that on Nuwber").
+> - **Form Filling**: For actual automation, data is protected via `sensitive_data` placeholders (e.g., `{email}`) so the browser automation filling the forms knows the value, but the AI vision model only sees the placeholder tag.
 > 
 > **Local Mode**: 100% private. Nothing leaves your machine.
 
