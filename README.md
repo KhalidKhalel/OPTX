@@ -96,7 +96,7 @@ make
 
 If you get `make: command not found`, follow the instructions for your operating system:
 
-###  macOS
+### 🍎 macOS
 
 **Option 1: Xcode Command Line Tools** (Recommended)
 
@@ -170,6 +170,9 @@ make --version
 
 ```
 OPTX/
+├── assets/             # Branding and documentation assets
+│   ├── logo.png
+│   └── README.md       # Backup documentation
 ├── index.html          # Main SPA - all views (search, removal, about)
 ├── style.css           # Highly organized CSS with dedicated comments
 ├── script.js           # Frontend logic and UI management
@@ -177,9 +180,9 @@ OPTX/
 ├── .env                # Your API keys (not committed to git)
 ├── Makefile            # Easy commands: make, update, clean
 └── backend/
-    ├── agent.py        # Core server using Browserless for automation
-    ├── playbooks.py    # Defined steps for individual site removals
-    └── phone_lookup.py # Phone carrier and rate center lookups
+    ├── agent.py         # Core server using Browserless for automation
+    ├── playbooks.py     # Defined steps for individual site removals
+    └── requirements.txt # Project dependencies
 ```
 
 ---
