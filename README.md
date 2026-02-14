@@ -3,15 +3,6 @@
     <img src="https://readme-typing-svg.demolab.com/?lines=OPTX+-+Online+Privacy+Tool+eXtractor;Protect+Your+Privacy+Online;Know+Where+Your+Data+Lives;Remove+Your+Digital+Footprint;Learn+to+Limit+Your+Online+Exposure;Made+by+Khalid+Khalel&font=Fira%20Code&center=true&width=700&height=50&color=8B5CF6&vCenter=true&pause=3000&size=24&background=1A1B27&duration=4000" />
   </a>
 </p>
-
-<br/>
-
-<p align="center">
-  <a href="#" title="Live Website - Coming Soon">
-    <img src="https://img.shields.io/badge/🌐_Live_Website-Coming_Soon-01FFFF?style=for-the-badge&labelColor=1A1B27" alt="Live Website - Coming Soon"/>
-  </a>
-</p>
-
 <p align="center">
   <a href="https://www.khalidkhalel.com/" title="Website"><img width="32px" alt="Website" src="https://img.icons8.com/ios/50/8B5CF6/internet.png"/></a>
   &#8287;&#8287;&#8287;&#8287;&#8287;
@@ -19,8 +10,6 @@
   &#8287;&#8287;&#8287;&#8287;&#8287;
   <a href="mailto:contact.khalidk@gmail.com" title="Email"><img width="32px" alt="Email" src="https://img.icons8.com/ios/50/8B5CF6/mail.png"/></a>
 </p>
-
-<br/>
 
 ---
 
