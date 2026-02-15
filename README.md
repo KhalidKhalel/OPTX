@@ -14,6 +14,9 @@
 
 ---
 
+> [!WARNING]
+> **Early Beta** — The automated removal process is in active development. It currently supports one site for testing purposes with more being added soon.
+
 ## What is OPTX?
 
 **OPTX** (Online Privacy Tool eXtractor) is an Open Source Intelligence (OSINT) assistant designed to help users understand and manage their digital footprint. By providing transparent access to public telecom and data broker information, users can see exactly what information is publicly available about them.
