@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+websockets
+httpx
+python-dotenv
+requests
+playwright
+lxml
+python-multipart
+beautifulsoup4

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OPTX - OSINT Assistant</title>
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=14" />
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <nav class="main-nav">
+        <a href="javascript:void(0)" class="nav-link active" onclick="switchView('search')">Search</a>
+        <a href="javascript:void(0)" class="nav-link" onclick="switchView('removal')">Removal</a>
+        <a href="javascript:void(0)" class="nav-link" onclick="switchView('about')">About</a>
+      </nav>
+      <h1>
+        <span class="glitch" data-text="OPTX">OPTX</span>
+      </h1>
+      <img src="assets/logo.png" alt="OPTX Logo" class="logo-img hide-on-about" />
+      <p class="tagline home-only">
+        OSINT Assistant - Find & Remove Your Digital Footprint
+      </p>
+      <p class="warning-note home-only">
+        You can still remove your info from paid sites using their opt-out pages - no payment required.
+      </p>
+    </header>
+
+    <main id="mainContainer">
+      <!-- Search View -->
+      <div id="searchView" class="view-section">
+        <div class="search-bar-container">
+          <form id="lookupForm" onsubmit="performSearch(event)">
+            <input type="text" id="phoneInput" placeholder="Enter phone number..." required />
+            <button type="submit" title="Search"><i class="fas fa-search"></i></button>
+          </form>
+        </div>
+
+        <div id="results" class="results"></div>
+
+
+
+      </div> <!-- End homeView -->
+
+      <!-- 
+        REMOVAL VIEW
+        Handles automated data removal requests and personal information management.
+      -->
+      <div id="removalView" class="view-section hidden">
+        <!-- Top Section: Personal Information -->
+        <div class="removal-info-section">
+          <div class="soc-dashboard center-dashboard">
+            <div class="settings-section">
+              <h3 class="text-center"><i class="fas fa-user-shield"></i> Your Information</h3>
+              <p class="settings-desc text-center">This information is used to automatically fill out removal forms on
+                your behalf.
+              </p>
+
+              <div class="input-row">
+                <div class="input-group">
+                  <label for="userFirstName">First Name</label>
+                  <input type="text" id="userFirstName" placeholder="John">
+                </div>
+                <div class="input-group">
+                  <label for="userLastName">Last Name</label>
+                  <input type="text" id="userLastName" placeholder="Doe">
+                </div>
+              </div>
+
+              <!-- Email removed - using temp mail automatically -->
+
+              <div class="input-group">
+                <label for="userStreet">Street Address</label>
+                <input type="text" id="userStreet" placeholder="123 Main Street">
+              </div>
+
+              <div class="input-row">
+                <div class="input-group">
+                  <label for="userCity">City</label>
+                  <input type="text" id="userCity" placeholder="Austin">
+                </div>
+                <div class="input-group">
+                  <label for="userState">State</label>
+                  <select id="userState">
+                    <option value="">Select...</option>
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <option value="AZ">Arizona</option>
+                    <option value="AR">Arkansas</option>
+                    <option value="CA">California</option>
+                    <option value="CO">Colorado</option>
+                    <option value="CT">Connecticut</option>
+                    <option value="DE">Delaware</option>
+                    <option value="FL">Florida</option>
+                    <option value="GA">Georgia</option>
+                    <option value="HI">Hawaii</option>
+                    <option value="ID">Idaho</option>
+                    <option value="IL">Illinois</option>
+                    <option value="IN">Indiana</option>
+                    <option value="IA">Iowa</option>
+                    <option value="KS">Kansas</option>
+                    <option value="KY">Kentucky</option>
+                    <option value="LA">Louisiana</option>
+                    <option value="ME">Maine</option>
+                    <option value="MD">Maryland</option>
+                    <option value="MA">Massachusetts</option>
+                    <option value="MI">Michigan</option>
+                    <option value="MN">Minnesota</option>
+                    <option value="MS">Mississippi</option>
+                    <option value="MO">Missouri</option>
+                    <option value="MT">Montana</option>
+                    <option value="NE">Nebraska</option>
+                    <option value="NV">Nevada</option>
+                    <option value="NH">New Hampshire</option>
+                    <option value="NJ">New Jersey</option>
+                    <option value="NM">New Mexico</option>
+                    <option value="NY">New York</option>
+                    <option value="NC">North Carolina</option>
+                    <option value="ND">North Dakota</option>
+                    <option value="OH">Ohio</option>
+                    <option value="OK">Oklahoma</option>
+                    <option value="OR">Oregon</option>
+                    <option value="PA">Pennsylvania</option>
+                    <option value="RI">Rhode Island</option>
+                    <option value="SC">South Carolina</option>
+                    <option value="SD">South Dakota</option>
+                    <option value="TN">Tennessee</option>
+                    <option value="TX">Texas</option>
+                    <option value="UT">Utah</option>
+                    <option value="VT">Vermont</option>
+                    <option value="VA">Virginia</option>
+                    <option value="WA">Washington</option>
+                    <option value="WV">West Virginia</option>
+                    <option value="WI">Wisconsin</option>
+                    <option value="WY">Wyoming</option>
+                    <option value="DC">Washington DC</option>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <label for="userZip">ZIP Code</label>
+                  <input type="text" id="userZip" placeholder="78701">
+                </div>
+              </div>
+
+              <div class="input-row">
+                <div class="input-group">
+                  <label for="userPhone">Phone Number</label>
+                  <input type="tel" id="userPhone" placeholder="512-555-1234">
+                </div>
+                <div class="input-group">
+                  <label for="userDOB">Date of Birth (optional)</label>
+                  <input type="date" id="userDOB">
+                </div>
+                <div class="input-group">
+                  <label for="userAge">Age (optional)</label>
+                  <input type="number" id="userAge" placeholder="25">
+                </div>
+              </div>
+
+              <div class="dashboard-footer">
+                <button id="dashboardStartBtn" class="start-removal-btn rainbow-border" onclick="initiateRemoval()">
+                  <i class="fas fa-power-off"></i> Start Removal
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Automation Interface: Live browser preview and activity logs -->
+        <div class="removal-automation-section">
+          <div id="browserView" class="browser-view">
+            <div class="browser-header">
+              <div class="browser-controls">
+                <span class="browser-dot red"></span>
+                <span class="browser-dot yellow"></span>
+                <span class="browser-dot green"></span>
+              </div>
+              <div class="browser-url" id="browserUrl">Ready for automation</div>
+              <div class="browser-controls">
+                <button class="browser-control-btn end-session-btn" id="endSessionBtn" onclick="endSession()"
+                  title="End Session">
+                  <i class="fas fa-times"></i> End
+                </button>
+
+                <button class="browser-expand-btn" onclick="toggleBrowserFullscreen()" title="Fullscreen">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="browser-content" id="browserContent">
+              <div class="browser-placeholder" id="browserPlaceholder">
+                <i class="fas fa-globe"></i>
+                <p>Browser Preview</p>
+                <p class="browser-subtitle">Ready for automation</p>
+                <p class="browser-subtitle browser-status" id="browserStatusText">Status: Ready</p>
+              </div>
+
+              <iframe id="liveBrowserFrame" class="browser-iframe hidden"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
+                allow="clipboard-read; clipboard-write"></iframe>
+
+              <img id="browserScreenshot" class="browser-screenshot hidden" alt="Browser View" />
+            </div>
+          </div>
+
+          <div class="removal-log-column">
+            <div class="removal-log-container">
+              <div class="log-header">
+                <span><i class="fas fa-list-ul"></i> Activity Log</span>
+                <div class="log-header-actions">
+                  <span class="log-status online" id="logPulse"></span>
+                  <button class="clear-log-btn" onclick="clearLog()" title="Clear Log">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+              <div id="removalLog" class="removal-log">
+                <div class="log-entry system">System ready. Waiting for removal start...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- End removalView -->
+
+      <!-- 
+        ABOUT VIEW
+        Conceptual overview and privacy mission statement.
+      -->
+      <div id="aboutView" class="view-section hidden">
+        <div class="about-section">
+          <!-- What is OPTX - Centered with animated glowing border -->
+          <div class="optx-intro-container">
+            <div class="optx-intro-content">
+              <img src="assets/logo.png" alt="OPTX Logo" class="optx-intro-logo">
+              <h2>What is OPTX?</h2>
+              <p class="about-paragraph"><strong>OPTX</strong> (Online Privacy Tool eXtractor) is an Open Source
+                Intelligence (OSINT) assistant
+                designed to help users understand and manage their digital footprint. By providing transparent access to
+                public telecom and data broker information, users can see exactly what information is publicly available
+                about them.</p>
+
+              <p class="about-paragraph">OPTX helps remove your data from <strong>people search sites</strong>,
+                data brokers that trade personal information for profit. These sites collect and sell names, addresses,
+                phone numbers, and more. As a result, consumers are at increased risk of unwanted marketing, identity
+                theft, financial hacks, account takeovers, spam, robocalls, and physical threats including stalking,
+                harassment, and doxing.</p>
+
+              <p class="warning-note-bordered"><strong>Note:</strong> OPTX does not target employment
+                verification sites, background check services for employers, or other specialized data brokers. Only
+                people search sites that expose your personal info publicly.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div> <!-- End container -->
+
+  <footer>
+    <p>Data is used for educational and privacy protection purposes only.</p>
+  </footer>
+  <script src="sites.js"></script>
+  <script src="script.js?v=3"></script>
+</body>
+
+</html>
