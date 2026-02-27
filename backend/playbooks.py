@@ -34,10 +34,8 @@ PLAYBOOKS = {
             {"action": "click", "selector": "#agreement"},
             {"action": "scroll_to", "selector": ".g-recaptcha"},
             {"action": "wait", "seconds": 2},
-            {"action": "solve_captcha"},
-            # Submit form
-            {"action": "click", "selector": "#BRP"},
-            {"action": "wait", "seconds": 2},
+            {"action": "solve_captcha", "submit_selector": "#BRP"},
+            {"action": "wait", "seconds": 3},
             # Verify submission success - look for confirmation message
             {
                 "action": "verify_text",

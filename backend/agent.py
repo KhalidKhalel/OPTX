@@ -439,26 +439,43 @@ class BrowserlessAgent:
             action = step.get("action")
             is_optional = step.get("optional", False)
 
-            # Check page state (skip during solve_captcha - Browserless manipulates page during solve)
-            if action != "solve_captcha" and self.page and hasattr(self.page, "is_closed") and self.page.is_closed():
-                logger.info(f"Page closed during {session_name}, waiting for recovery...")
-                recovered = False
-                for _ in range(6):  # Wait up to 3 seconds
-                    await asyncio.sleep(0.5)
-                    if self.page and not (hasattr(self.page, "is_closed") and self.page.is_closed()):
-                        recovered = True
+            # Proactively refresh page reference from browser context
+            # Browserless may replace the page internally (e.g., during captcha detection)
+            if action != "solve_captcha" and self.browser and self.browser.contexts:
+                ctx = self.browser.contexts[0]
+                for pg in ctx.pages:
+                    if not pg.is_closed():
+                        if pg != self.page:
+                            logger.info(f"Page reference changed, switching to active page")
+                            self.page = pg
+                            try:
+                                self.cdp_session = await self.page.context.new_cdp_session(self.page)
+                            except Exception:
+                                pass
                         break
-                if not recovered:
-                    # Try to get page from browser context
+
+            # Check page state
+            if action != "solve_captcha" and self.page and hasattr(self.page, "is_closed") and self.page.is_closed():
+                logger.info(f"Page closed during {session_name}, attempting recovery...")
+                recovered = False
+                for _ in range(10):  # Wait up to 5 seconds
+                    await asyncio.sleep(0.5)
                     if self.browser and self.browser.contexts:
                         ctx = self.browser.contexts[0]
-                        if ctx.pages:
-                            self.page = ctx.pages[0]
-                            logger.info(f"Recovered page from context")
-                            recovered = True
-                    if not recovered:
-                        logger.warning(f"Page closed, stopping {session_name}")
-                        return False
+                        for pg in ctx.pages:
+                            if not pg.is_closed():
+                                self.page = pg
+                                try:
+                                    self.cdp_session = await self.page.context.new_cdp_session(self.page)
+                                except Exception:
+                                    pass
+                                recovered = True
+                                break
+                    if recovered:
+                        break
+                if not recovered:
+                    logger.warning(f"Page closed, stopping {session_name}")
+                    return False
 
             # Log each step for debugging
             logger.info(f"{session_name} Step {step_idx + 1}: {action}")
@@ -467,17 +484,46 @@ class BrowserlessAgent:
                 success = await self._execute_single_step(step, data)
                 if not success and not is_optional:
                     logger.warning(f"{session_name} step failed: {action}")
-                    # Only abort on navigation or captcha failures
-                    if action in ["navigate", "solve_captcha"]:
+                    # Only abort on navigation failures
+                    if action == "navigate":
                         return False
             except Exception as e:
                 error_str = str(e).lower()
-                if "closed" in error_str or "target" in error_str:
-                    logger.info(f"Page closed during {action} - may be redirecting")
+                if "closed" in error_str or "target" in error_str or "context" in error_str:
+                    logger.info(f"Page died during {action}, recovering and retrying...")
+                    # Recover page reference
+                    recovered = False
                     await asyncio.sleep(1)
+                    if self.browser and self.browser.contexts:
+                        ctx = self.browser.contexts[0]
+                        for pg in ctx.pages:
+                            if not pg.is_closed():
+                                self.page = pg
+                                try:
+                                    self.cdp_session = await self.page.context.new_cdp_session(self.page)
+                                except Exception:
+                                    pass
+                                recovered = True
+                                break
+                    if recovered:
+                        # Retry the step once with recovered page
+                        try:
+                            retry_success = await self._execute_single_step(step, data)
+                            if not retry_success and not is_optional:
+                                logger.warning(f"Retry also failed for {action}")
+                                if action == "navigate":
+                                    return False
+                        except Exception as retry_err:
+                            logger.warning(f"Retry error for {action}: {retry_err}")
+                            if not is_optional and action == "navigate":
+                                return False
+                    else:
+                        logger.warning(f"Could not recover page after {action} failure")
+                        if not is_optional and action == "navigate":
+                            return False
                 else:
                     logger.error(f"Step {action} error: {e}")
-                    if not is_optional:
+                    if not is_optional and action == "navigate":
                         return False
         
         return True
@@ -504,44 +550,50 @@ class BrowserlessAgent:
                 
                 await self.send_msg(f"Navigating to {url[:50]}...")
                 try:
-                    await self.page.goto(url, wait_until="domcontentloaded", timeout=30000)
+                    # Use domcontentloaded + longer timeout to handle Cloudflare
+                    await self.page.goto(url, wait_until="domcontentloaded", timeout=60000)
                     
-                    # Wait for real page to load after Cloudflare
-                    # Poll until Cloudflare challenge elements are gone
-                    cf_cleared = False
-                    for attempt in range(30):  # Up to 30 seconds
+                    # Wait for page to fully load after Cloudflare
+                    await self.send_msg("Waiting for page to fully load...")
+                    max_wait = 30
+                    for i in range(max_wait):
                         try:
-                            is_cf = await self.page.evaluate("""() => {
-                                const title = document.title.toLowerCase();
-                                const body = document.body ? document.body.innerText.toLowerCase() : '';
-                                // Detect Cloudflare challenge page
-                                if (title.includes('just a moment') || title.includes('cloudflare')) return true;
-                                if (body.includes('checking your browser') || body.includes('verify you are human')) return true;
-                                // Check for CF challenge iframe
-                                if (document.querySelector('#challenge-running, .cf-browser-verification, #cf-challenge-running')) return true;
-                                return false;
-                            }""")
-                            if not is_cf:
-                                cf_cleared = True
-                                break
+                            is_cloudflare = await self.page.evaluate("""
+                                () => {
+                                    return document.body.innerText.includes('Checking your browser') ||
+                                           document.body.innerText.includes('Just a moment') ||
+                                           document.querySelector('iframe[src*="challenges.cloudflare"]') !== null;
+                                }
+                            """)
+                            if not is_cloudflare:
+                                has_content = await self.page.evaluate("""
+                                    () => {
+                                        return !!(
+                                            document.querySelector('#verifyEmailForm') ||
+                                            document.querySelector('#removalForm') ||
+                                            document.querySelector('form') ||
+                                            document.querySelector('main') ||
+                                            document.body.innerText.length > 500
+                                        );
+                                    }
+                                """)
+                                if has_content:
+                                    break
+                            await asyncio.sleep(1)
                         except Exception:
-                            pass
-                        await asyncio.sleep(1)
+                            await asyncio.sleep(1)
                     
-                    if cf_cleared:
-                        # Extra wait for page to fully settle (JS, lazy load, etc.)
-                        try:
-                            await self.page.wait_for_load_state("networkidle", timeout=5000)
-                        except Exception:
-                            pass  # networkidle timeout is OK, page may have streaming content
-                        await self.send_msg("Navigated successfully")
-                        await self.send_msg("Filling removal form...")
-                    else:
-                        await self.send_msg(f"Navigated (Cloudflare may still be active)")
-                    
+                    # Settle pause after Cloudflare
+                    await asyncio.sleep(3)
+                    await self.send_msg("Navigated successfully")
                     return True
-                except Exception as e:
-                    logger.warning(f"Navigation error: {e}")
+                except Exception as nav_error:
+                    if "Timeout" in str(nav_error):
+                        logger.warning(f"Navigation timeout, continuing: {url}")
+                        await self.send_msg("Page loading slow, continuing...")
+                        await asyncio.sleep(3)
+                        return True
+                    logger.warning(f"Navigation error: {nav_error}")
                     return False
                     
             elif action == "wait_for":
@@ -550,20 +602,27 @@ class BrowserlessAgent:
                 try:
                     await self.page.wait_for_selector(selector, timeout=timeout)
                     return True
-                except Exception:
-                    if not is_optional:
+                except Exception as e:
+                    if "Timeout" in str(e):
+                        await self.send_msg(f"Element not found: {selector}, continuing...")
+                    elif not is_optional:
                         logger.warning(f"Element not found: {selector}")
                     return is_optional
                     
             elif action == "scroll_to":
                 selector = step["selector"]
                 try:
-                    # Wait for element to exist before scrolling
-                    await self.page.wait_for_selector(selector, timeout=10000)
-                    await self.page.evaluate(f'document.querySelector("{selector}")?.scrollIntoView({{behavior: "smooth", block: "center"}})')
+                    await self.page.wait_for_selector(selector, state="visible", timeout=10000)
+                    el = await self.page.query_selector(selector)
+                    if el:
+                        await el.scroll_into_view_if_needed()
+                        await asyncio.sleep(0.5)
                     return True
-                except Exception:
-                    return is_optional
+                except Exception as e:
+                    error_str = str(e).lower()
+                    if "closed" in error_str or "context" in error_str:
+                        logger.warning(f"Browser issue during scroll: {e}")
+                    return True  # scroll never kills a session
                     
             elif action == "fill" or action == "human_type":
                 selector = step["selector"]
@@ -620,17 +679,43 @@ class BrowserlessAgent:
             elif action == "click":
                 selector = step["selector"]
                 try:
-                    await self.page.wait_for_selector(selector, timeout=5000)
+                    # Wait for element, then try to click
+                    await self.page.wait_for_selector(selector, state="visible", timeout=10000)
+                    await asyncio.sleep(0.3)  # Brief settle
                     await self.page.click(selector)
                     return True
                 except Exception as e:
-                    # Try JS click as fallback
-                    try:
-                        await self.page.evaluate(f'document.querySelector("{selector}")?.click()')
-                        return True
-                    except:
-                        logger.warning(f"Click failed: {e}")
-                        return is_optional
+                    error_str = str(e).lower()
+                    if "closed" in error_str or "target" in error_str or "context" in error_str:
+                        # Page reference died - try to recover and use JS click
+                        logger.info(f"Page died during click {selector}, recovering...")
+                        await asyncio.sleep(1)
+                        if self.browser and self.browser.contexts:
+                            ctx = self.browser.contexts[0]
+                            for pg in ctx.pages:
+                                if not pg.is_closed():
+                                    self.page = pg
+                                    try:
+                                        self.cdp_session = await self.page.context.new_cdp_session(self.page)
+                                    except Exception:
+                                        pass
+                                    break
+                        # Retry with JS click on recovered page
+                        try:
+                            await self.page.evaluate(f'document.querySelector("{selector}")?.click()')
+                            logger.info(f"JS click succeeded on recovered page: {selector}")
+                            return True
+                        except Exception as retry_err:
+                            logger.warning(f"Click failed after recovery: {retry_err}")
+                            return is_optional
+                    else:
+                        # Try JS click as fallback
+                        try:
+                            await self.page.evaluate(f'document.querySelector("{selector}")?.click()')
+                            return True
+                        except:
+                            logger.warning(f"Click failed: {e}")
+                            return is_optional
                         
             elif action == "wait":
                 seconds = step.get("seconds", 1)
@@ -638,7 +723,8 @@ class BrowserlessAgent:
                 return True
                 
             elif action == "solve_captcha":
-                result = await self.wait_for_captcha_solved()
+                submit_selector = step.get("submit_selector")
+                result = await self.wait_for_captcha_solved(submit_selector=submit_selector)
                 return result.get("solved", False) or True  # Don't fail on captcha issues
                 
             elif action == "verify_text":
@@ -1106,11 +1192,12 @@ class BrowserlessAgent:
         """Build Browserless WebSocket endpoint with features enabled."""
         params = [f"token={self.api_key}"]
 
-        # Add proxy if enabled
+        # Add proxy if enabled (with rotation between sessions)
         if self.settings.get("proxy", True):  # Default to True
             params.append("proxy=residential")
-            params.append("proxyCountry=us")  # US exit node with rotation
-            self.settings["proxy"] = True  # Ensure reflected in logs
+            params.append("proxyCountry=us")
+            params.append("proxySticky=false")  # Force new IP per session
+            self.settings["proxy"] = True
 
         # Add CAPTCHA solving if enabled
         if self.settings.get("captcha", True):
@@ -1275,94 +1362,253 @@ class BrowserlessAgent:
         """Sync wrapper for CDP event callbacks - just logs the message."""
         logger.info(f"CDP Event: {status_text}")
 
-    async def wait_for_captcha_solved(self, timeout=180):
+    async def wait_for_captcha_solved(self, timeout=180, submit_selector=None):
         """
-        Wait for Browserless to solve captcha.
-        With solveCaptchas=true in the connection URL, Browserless automatically
-        detects and solves captchas. We call solveCaptcha via CDP and wait.
+        Handle reCAPTCHA on the page.
+        
+        Browserless with solveCaptchas=true handles captchas automatically,
+        but it kills the Playwright page reference in the process.
+        
+        Strategy:
+        1. Check if the g-recaptcha-response textarea already has a token
+        2. If not, wait for Browserless captchaAutoSolved event (it fires with a token)
+        3. After page death/recovery, inject the token into the form
+        4. Trigger the data-callback function
         """
         if not self.page or (hasattr(self.page, "is_closed") and self.page.is_closed()):
             logger.warning("wait_for_captcha_solved called on closed page")
             return {"solved": False, "error": "Page closed"}
 
-        # Check if there's actually a captcha on this page
+        # Check if there's a reCAPTCHA on this page
         try:
-            has_captcha = await self.page.evaluate("""
+            has_recaptcha = await self.page.evaluate("""
                 () => {
                     return !!(
                         document.querySelector('.g-recaptcha') ||
-                        document.querySelector('.h-captcha') ||
                         document.querySelector('iframe[src*="recaptcha"]') ||
-                        document.querySelector('iframe[src*="hcaptcha"]') ||
                         document.querySelector('[data-sitekey]')
                     );
                 }
             """)
-            if not has_captcha:
-                logger.info("No captcha detected on page")
+            if not has_recaptcha:
                 return {"solved": True, "message": "No captcha on page"}
         except Exception as e:
             if "closed" in str(e).lower():
-                return {"solved": True, "message": "Page redirected"}
-            logger.warning(f"Error checking for captcha: {e}")
+                # Page already dead - check if captcha was auto-solved
+                if hasattr(self, 'captcha_result') and self.captcha_result.get('solved'):
+                    logger.info("Page closed but captcha was auto-solved")
+                    return {"solved": True, "token": self.captcha_result.get('token', '')}
+                return {"solved": False, "error": "Page closed before captcha check"}
 
-        if not self.cdp_session:
-            logger.warning("No CDP session available for captcha solving")
-            return {"solved": False, "error": "No CDP session"}
+        await self.send_msg("Solving reCAPTCHA...")
+        logger.info("reCAPTCHA detected on page")
 
-        await self.send_msg("Captcha detected, solving...")
-        logger.info("Captcha detected, calling Browserless.solveCaptcha")
-
-        # Simple approach: call solveCaptcha and wait for it
-        try:
-            result = await self.cdp_session.send("Browserless.solveCaptcha")
-            logger.info(f"solveCaptcha result: {result}")
-
-            if result.get("solved"):
-                await self.send_msg("Captcha solved")
-                # Trigger the page's reCAPTCHA callback so the form knows it's solved
-                try:
-                    await self.page.evaluate("""
-                        () => {
-                            const response = document.querySelector('[name="g-recaptcha-response"]');
-                            const token = response ? response.value : '';
-                            const widget = document.querySelector('[data-callback]');
-                            if (widget) {
-                                const callbackName = widget.getAttribute('data-callback');
-                                if (window[callbackName]) window[callbackName](token);
+        # Helper: check if the g-recaptcha-response textarea has a genuine token
+        async def check_response_token():
+            try:
+                return await self.page.evaluate("""
+                    () => {
+                        const response = document.querySelector('textarea[name="g-recaptcha-response"]');
+                        if (response && response.value && response.value.length > 20) return response.value;
+                        try {
+                            if (typeof grecaptcha !== 'undefined') {
+                                if (grecaptcha.getResponse && grecaptcha.getResponse().length > 0)
+                                    return grecaptcha.getResponse();
+                                if (grecaptcha.enterprise && grecaptcha.enterprise.getResponse) {
+                                    const resp = grecaptcha.enterprise.getResponse();
+                                    if (resp && resp.length > 0) return resp;
+                                }
                             }
-                            try { if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise) grecaptcha.enterprise.execute(); } catch(e) {}
+                        } catch(e) {}
+                        return null;
+                    }
+                """)
+            except Exception:
+                return None
+
+        # Helper: trigger callback AND click submit button atomically
+        async def trigger_callback_and_submit(token=""):
+            try:
+                await self.page.evaluate("""
+                    (args) => {
+                        const token = args.token;
+                        const submitSelector = args.submitSelector;
+                        // Fill the response textarea
+                        const response = document.querySelector('textarea[name="g-recaptcha-response"]');
+                        if (response && (!response.value || response.value.length < 20)) {
+                            response.value = token;
                         }
-                    """)
-                except Exception as cb_err:
-                    logger.debug(f"Callback trigger attempt: {cb_err}")
-                await asyncio.sleep(2)
+                        // Trigger the data-callback
+                        const widget = document.querySelector('[data-callback]');
+                        if (widget) {
+                            const callbackName = widget.getAttribute('data-callback');
+                            if (window[callbackName]) {
+                                const finalToken = response ? response.value : token;
+                                window[callbackName](finalToken);
+                            }
+                        }
+                        // Click submit button with delay
+                        if (submitSelector) {
+                            setTimeout(function() {
+                                var btn = document.querySelector(submitSelector);
+                                if (btn) btn.click();
+                            }, 500);
+                        }
+                    }
+                """, {"token": token, "submitSelector": submit_selector or ""})
+                logger.info("Triggered callback" + (f" + submit: {submit_selector}" if submit_selector else ""))
+                
+                if submit_selector:
+                    await asyncio.sleep(0.8)
+                    try:
+                        await self.page.click(submit_selector, timeout=3000)
+                    except Exception:
+                        pass
+                    await self.send_msg("Form submitted!")
+            except Exception as e:
+                logger.debug(f"Callback/submit: {e}")
+                if submit_selector and "closed" in str(e).lower():
+                    await self.send_msg("Form submitted!")
+
+        # Step 1: Check if already solved (token in response textarea)
+        existing_token = await check_response_token()
+        if existing_token:
+            await self.send_msg("reCAPTCHA solved")
+            logger.info("reCAPTCHA already has a response token")
+            await trigger_callback_and_submit(existing_token)
+            await asyncio.sleep(1)
+            return {"solved": True}
+
+        # Step 2: Check if Browserless already auto-solved it (via CDP event)
+        if hasattr(self, 'captcha_result') and self.captcha_result.get('solved'):
+            token = self.captcha_result.get('token', '')
+            if token:
+                await self.send_msg("reCAPTCHA solved")
+                logger.info(f"reCAPTCHA auto-solved by Browserless (token from event, len={len(token)})")
+                await trigger_callback_and_submit(token)
+                await asyncio.sleep(1)
                 return {"solved": True}
+
+        # Step 3: Click the reCAPTCHA checkbox to trigger solving
+        logger.info("Clicking reCAPTCHA checkbox in iframe to trigger solve")
+        try:
+            recaptcha_frame = None
+            for frame in self.page.frames:
+                frame_url = frame.url or ""
+                if "recaptcha" in frame_url and "anchor" in frame_url:
+                    recaptcha_frame = frame
+                    break
+            # Fallback: any frame with recaptcha
+            if not recaptcha_frame:
+                for frame in self.page.frames:
+                    if "recaptcha" in (frame.url or ""):
+                        recaptcha_frame = frame
+                        break
+            
+            if recaptcha_frame:
+                try:
+                    await recaptcha_frame.click("#recaptcha-anchor", timeout=5000)
+                    logger.info("Clicked reCAPTCHA checkbox")
+                except Exception as click_err:
+                    logger.debug(f"Checkbox click failed: {click_err}")
             else:
-                logger.warning(f"solveCaptcha returned: {result}")
-                await self.send_msg("Captcha may not have solved, continuing...")
-                return {"solved": False, "error": result.get("error", "Unknown")}
-
+                logger.warning("Could not find reCAPTCHA iframe")
         except Exception as e:
-            error_str = str(e).lower()
-            if "closed" in error_str or "target" in error_str or "context" in error_str:
-                # Page navigated during solve = captcha was likely solved
-                logger.info(f"Page changed during captcha solve: {e}")
-                await asyncio.sleep(2)
-                # Recover page reference
-                if self.browser and self.browser.contexts:
-                    ctx = self.browser.contexts[0]
-                    if ctx.pages:
-                        self.page = ctx.pages[0]
-                        try:
-                            self.cdp_session = await self.page.context.new_cdp_session(self.page)
-                        except Exception:
-                            pass
-                await self.send_msg("Captcha solved")
-                return {"solved": True, "message": "Page navigated after solve"}
+            logger.debug(f"Frame access error: {e}")
 
-            logger.error(f"solveCaptcha error: {e}")
-            return {"solved": False, "error": str(e)}
+        # Step 4: Poll for solve - check both the page token AND the CDP event
+        await self.send_msg("Waiting for reCAPTCHA to be solved...")
+        poll_timeout = 60
+        poll_start = asyncio.get_event_loop().time()
+        last_status_time = poll_start
+
+        while (asyncio.get_event_loop().time() - poll_start) < poll_timeout:
+            # Check CDP event first (Browserless solved it)
+            if hasattr(self, 'captcha_result') and self.captcha_result.get('solved'):
+                token = self.captcha_result.get('token', '')
+                if token:
+                    logger.info(f"Browserless captchaAutoSolved event fired (token len={len(token)})")
+                    # Try to inject token into form
+                    try:
+                        if not self.page.is_closed():
+                            await trigger_callback_and_submit(token)
+                    except Exception:
+                        pass
+                    await self.send_msg("reCAPTCHA solved")
+                    await asyncio.sleep(1)
+                    return {"solved": True, "token": token}
+
+            # Check page token
+            try:
+                if not self.page.is_closed():
+                    token = await check_response_token()
+                    if token:
+                        await self.send_msg("reCAPTCHA solved")
+                        logger.info("reCAPTCHA response token detected")
+                        await trigger_callback_and_submit(token)
+                        await asyncio.sleep(1)
+                        return {"solved": True}
+            except Exception:
+                pass
+
+            # If page died, wait for Browserless event
+            try:
+                if self.page.is_closed():
+                    # Try to recover page
+                    if self.browser and self.browser.contexts:
+                        ctx = self.browser.contexts[0]
+                        for pg in ctx.pages:
+                            if not pg.is_closed():
+                                self.page = pg
+                                try:
+                                    self.cdp_session = await self.page.context.new_cdp_session(self.page)
+                                except Exception:
+                                    pass
+                                logger.info("Recovered page during captcha solve")
+                                break
+            except Exception:
+                pass
+
+            # Progress update
+            now = asyncio.get_event_loop().time()
+            if now - last_status_time > 15:
+                elapsed = int(now - poll_start)
+                await self.send_msg(f"Still solving reCAPTCHA... ({elapsed}s)")
+                last_status_time = now
+
+            await asyncio.sleep(2)
+
+        # Step 5: Timeout - try programmatic execute as last resort
+        logger.warning("reCAPTCHA solve timed out, trying programmatic approach")
+        try:
+            if not self.page.is_closed():
+                await self.page.evaluate("""
+                    () => {
+                        try {
+                            if (typeof grecaptcha !== 'undefined') {
+                                if (grecaptcha.enterprise && grecaptcha.enterprise.execute) {
+                                    const sitekey = document.querySelector('[data-sitekey]')?.getAttribute('data-sitekey');
+                                    if (sitekey) grecaptcha.enterprise.execute(sitekey, {action: 'submit'});
+                                } else if (grecaptcha.execute) {
+                                    grecaptcha.execute();
+                                }
+                            }
+                        } catch(e) {}
+                    }
+                """)
+                await asyncio.sleep(5)
+                token = await check_response_token()
+                if token:
+                    await self.send_msg("reCAPTCHA solved")
+                    logger.info("Solved via programmatic execute")
+                    await trigger_callback_and_submit(token)
+                    return {"solved": True}
+        except Exception:
+            pass
+
+        await self.send_msg("reCAPTCHA could not be solved")
+        logger.warning("reCAPTCHA solve failed after all attempts")
+        return {"solved": False, "error": "Timeout"}
 
     async def start_screenshot_loop(self):
         """Start continuous screenshot updates (screenshot only, no status spam)."""
