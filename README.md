@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="https://optx-osint.netlify.app/" title="Website"><img width="32px" alt="Website" src="https://img.icons8.com/ios/50/8B5CF6/internet.png"/></a>
+  <a href="https://www.khalidkhalel.com/" title="Website"><img width="32px" alt="Website" src="https://img.icons8.com/ios/50/8B5CF6/internet.png"/></a>
   &#8287;&#8287;&#8287;&#8287;&#8287;
   <a href="https://linkedin.com/in/khalidkhalel" title="LinkedIn"><img width="32px" alt="LinkedIn" src="https://img.icons8.com/ios/50/8B5CF6/linkedin.png"/></a>
   &#8287;&#8287;&#8287;&#8287;&#8287;
@@ -18,7 +18,11 @@
 
 OPTX is a static OSINT assistant for opening public phone lookup and opt-out links across people-search and data broker sites.
 
-Live site: [optx-osint.netlify.app](https://optx-osint.netlify.app/)
+<p align="center">
+  <a href="https://optx-osint.netlify.app/" title="Live Website">
+    <img src="https://img.shields.io/badge/%F0%9F%8C%90%20LIVE%20WEBSITE-OPTX%20OSINT-01FFFF?style=for-the-badge&labelColor=1A1B27" alt="Live Website"/>
+  </a>
+</p>
 
 This version is frontend-only. It works with plain HTML, CSS, and JavaScript, has no backend, does not use API keys, and does not store searches in any OPTX database. Name, email, VIN, IP, and address lookup types are kept in the interface as coming-soon options.
 
