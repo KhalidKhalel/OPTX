@@ -18,6 +18,8 @@
 
 OPTX is a static OSINT assistant for opening public phone lookup and opt-out links across people-search and data broker sites.
 
+Live site: [optx-osint.netlify.app](https://optx-osint.netlify.app/)
+
 This version is frontend-only. It works with plain HTML, CSS, and JavaScript, has no backend, does not use API keys, and does not store searches in any OPTX database. Name, email, VIN, IP, and address lookup types are kept in the interface as coming-soon options.
 
 ## Features

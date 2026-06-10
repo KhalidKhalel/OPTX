@@ -192,39 +192,12 @@ header {
 }
 
 #lookupForm {
-  position: relative;
   width: min(100%, 960px);
   padding: 0.65rem;
-  border: 0;
+  border: 1px solid rgba(0, 245, 255, 0.22);
   border-radius: 18px;
   background: linear-gradient(135deg, rgba(21, 28, 39, 0.96), rgba(12, 17, 26, 0.96));
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(99, 102, 241, 0.08);
-  isolation: isolate;
-}
-
-#lookupForm::before,
-#lookupForm::after {
-  content: '';
-  position: absolute;
-  border-radius: 20px;
-  pointer-events: none;
-}
-
-#lookupForm::before {
-  inset: -1px;
-  background: conic-gradient(from var(--optx-angle, 0deg), #6366f1, #00f5ff, #10b981, #f59e0b, #6366f1);
-  opacity: 0.62;
-  animation: optx-border-rotate 8s linear infinite;
-  z-index: -1;
-}
-
-#lookupForm::after {
-  inset: -5px;
-  background: conic-gradient(from var(--optx-angle, 0deg), rgba(99, 102, 241, 0.26), rgba(0, 245, 255, 0.2), rgba(16, 185, 129, 0.16), rgba(245, 158, 11, 0.16), rgba(99, 102, 241, 0.26));
-  filter: blur(14px);
-  opacity: 0.32;
-  animation: optx-border-rotate 8s linear infinite;
-  z-index: -2;
 }
 
 .lookup-controls {
@@ -315,17 +288,17 @@ header {
   width: 3.4rem;
   height: 3.15rem;
   margin-top: calc(0.74rem * 1.2 + 0.35rem);
-  overflow: hidden;
+  overflow: visible;
   border: 0;
   border-radius: 13px;
-  background: #071018;
+  background: transparent;
   color: #e7fbff;
   cursor: pointer;
   font-weight: 700;
   font-size: 0.98rem;
-  box-shadow: 0 0 18px rgba(0, 245, 255, 0.16), inset 0 0 18px rgba(0, 245, 255, 0.08);
+  box-shadow: inset 0 0 18px rgba(0, 245, 255, 0.08);
   isolation: isolate;
-  transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: filter 0.2s ease, box-shadow 0.2s ease;
 }
 
 #lookupForm button::before,
@@ -340,25 +313,40 @@ header {
   border-radius: inherit;
   background: conic-gradient(from var(--optx-angle, 0deg), #a855f7, #64ffda, #ed4502, #2a83db, #a855f7);
   animation: optx-border-rotate 8s linear infinite;
-  z-index: 0;
+  z-index: 1;
 }
 
 #lookupForm button::after {
   inset: 2px;
   border-radius: 11px;
   background: linear-gradient(135deg, #101827, #071018);
+  z-index: 2;
+}
+
+#lookupForm button .button-glow {
+  position: absolute;
+  inset: -7px;
+  border-radius: 19px;
+  background: conic-gradient(from var(--optx-angle, 0deg), #8b2cff, #00f5ff, #ff3d00, #1d4ed8, #8b2cff);
+  filter: blur(14px) saturate(1.45);
+  opacity: 0.62;
+  animation: optx-border-rotate 8s linear infinite;
+  pointer-events: none;
   z-index: 0;
 }
 
 #lookupForm button i {
   position: relative;
-  z-index: 1;
+  z-index: 3;
 }
 
 #lookupForm button:hover {
   filter: brightness(1.08);
-  transform: translateY(-1px);
-  box-shadow: 0 0 24px rgba(0, 245, 255, 0.28), inset 0 0 20px rgba(99, 102, 241, 0.14);
+  box-shadow: inset 0 0 20px rgba(99, 102, 241, 0.14);
+}
+
+#lookupForm button:hover .button-glow {
+  opacity: 0.7;
 }
 
 .results {
@@ -579,7 +567,7 @@ td a::after {
   width: 0;
   height: 1px;
   background: var(--accent);
-  transition: width 0.56s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: width 0.85s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 td a:hover {
@@ -722,7 +710,7 @@ td a:hover::after {
   width: 0;
   height: 1px;
   background: var(--accent);
-  transition: width 0.56s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: width 0.85s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .scan-provider a:hover::after {
@@ -789,13 +777,6 @@ td a:hover::after {
   text-align: center;
 }
 
-.removal-card.priority-card {
-  border-color: rgba(100, 255, 218, 0.28);
-  background:
-    linear-gradient(135deg, rgba(28, 37, 51, 0.92), rgba(12, 17, 26, 0.92)),
-    radial-gradient(circle at 12% 0%, rgba(100, 255, 218, 0.2), transparent 42%);
-}
-
 .card-rank {
   display: inline-flex;
   align-items: center;
@@ -848,7 +829,7 @@ td a:hover::after {
   width: 0;
   height: 1px;
   background: var(--accent);
-  transition: width 0.56s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: width 0.85s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .removal-card a:hover,
