@@ -490,6 +490,8 @@ header {
 
 .table-wrapper {
   min-width: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .table-wrapper h3 {
@@ -524,6 +526,10 @@ tbody td {
   border-top: 1px solid var(--line);
   color: var(--muted);
   vertical-align: middle;
+  overflow-wrap: break-word;
+}
+
+tbody td:not(.site-cell) {
   overflow-wrap: anywhere;
 }
 
@@ -541,6 +547,11 @@ th:nth-child(3),
 td:nth-child(3) {
   width: 7.75rem;
   text-align: center;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 14rem;
 }
 
 th:nth-child(4),
@@ -581,10 +592,17 @@ td a:hover::after {
 .site-cell {
   color: var(--text);
   font-weight: 600;
+  min-width: 14rem;
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: nowrap;
 }
 
 .site-cell span:first-child {
   display: inline-block;
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: nowrap;
 }
 
 .mode-badge {
@@ -598,6 +616,8 @@ td a:hover::after {
   font-weight: 800;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  word-break: normal;
+  white-space: nowrap;
 }
 
 .mode-badge.direct {
@@ -1144,6 +1164,26 @@ footer {
   tbody td,
   thead th {
     padding: 0.7rem 0.55rem;
+  }
+
+  table {
+    min-width: 720px;
+    table-layout: auto;
+    font-size: 0.78rem;
+  }
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    width: 13rem;
+  }
+
+  .site-cell {
+    min-width: 13rem;
+    font-size: 0.72rem;
+  }
+
+  .mode-badge {
+    font-size: 0.58rem;
   }
 
   .scan-section {
