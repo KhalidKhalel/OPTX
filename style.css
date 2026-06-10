@@ -32,6 +32,7 @@ body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+  overflow-x: hidden;
   background: linear-gradient(135deg, var(--bg) 0%, #0a1018 100%);
   color: var(--text);
   font-family: 'Inter', 'Segoe UI', sans-serif;
@@ -235,7 +236,7 @@ header {
   outline: none;
   background: rgba(12, 17, 26, 0.82);
   color: var(--text);
-  font-size: 0.96rem;
+  font-size: 1rem;
   text-transform: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
@@ -952,12 +953,19 @@ td a:hover::after {
 footer {
   width: 100%;
   margin-top: auto;
-  padding: 1rem 0;
+  padding: 1rem;
   border-top: 1px solid var(--line);
   background: var(--panel);
   color: var(--primary);
   text-align: center;
   font-size: 0.82rem;
+}
+
+footer p {
+  max-width: 100%;
+  margin: 0;
+  overflow-wrap: break-word;
+  line-height: 1.5;
 }
 
 @keyframes glitch-a {
