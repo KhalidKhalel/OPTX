@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="OPTX is a static OSINT assistant for opening public phone lookup and opt-out links." />
+  <meta name="theme-color" content="#0c111a" />
+  <meta property="og:title" content="OPTX - Online Privacy Tool eXtractor" />
+  <meta property="og:description"
+    content="Static frontend OSINT assistant for public phone lookup and opt-out links." />
+  <meta property="og:type" content="website" />
+  <title>OPTX - Search</title>
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css?v=20260610-2" />
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="site-topbar">
+        <h1 class="wordmark">
+          <span class="glitch" data-text="OPTX">OPTX</span>
+        </h1>
+
+        <nav class="main-nav" aria-label="Primary navigation">
+          <button class="nav-link active" type="button" data-view="search">Search</button>
+          <button class="nav-link" type="button" data-view="scan">Free Scan</button>
+          <button class="nav-link" type="button" data-view="removal">Removal</button>
+          <button class="nav-link" type="button" data-view="about">About</button>
+        </nav>
+      </div>
+
+      <img src="assets/logo.png" alt="OPTX Logo" class="logo-img hide-on-about" />
+      <p class="tagline home-only">
+        OSINT Assistant - Find Your Digital Footprint
+      </p>
+      <p class="warning-note home-only">
+        Lookup links are generated locally in your browser.
+      </p>
+    </header>
+
+    <main id="mainContainer">
+      <section id="searchView" class="view-section" aria-labelledby="searchHeading">
+        <h2 id="searchHeading" class="visually-hidden">Search public lookup sites</h2>
+        <div class="search-bar-container">
+          <form id="lookupForm" novalidate>
+            <div class="lookup-controls">
+              <label class="lookup-type-control" for="lookupType">
+                <span>Search type</span>
+                <select id="lookupType" name="lookupType">
+                  <option value="phone">Phone</option>
+                  <option value="name" disabled>Name - Coming soon</option>
+                  <option value="email" disabled>Email - Coming soon</option>
+                  <option value="vin" disabled>VIN - Coming soon</option>
+                  <option value="ip" disabled>IP - Coming soon</option>
+                  <option value="address" disabled>Address - Coming soon</option>
+                </select>
+              </label>
+              <div id="lookupFields" class="lookup-fields"></div>
+              <button type="submit" title="Search" aria-label="Search"><i class="fas fa-search"></i></button>
+            </div>
+          </form>
+        </div>
+
+        <div id="results" class="results" aria-live="polite"></div>
+      </section>
+
+      <section id="scanView" class="view-section hidden" aria-labelledby="scanHeading">
+        <div class="scan-section">
+          <h2 id="scanHeading">Free Exposure Scan</h2>
+          <p class="scan-lead">
+            These are the best free scan services for checking where your data may be exposed.
+          </p>
+          <p class="scan-note">
+            Use an alias or temporary email when a scan asks you to sign up. It keeps follow-up messages separate from
+            your real inbox.
+          </p>
+
+          <div class="scan-provider-grid">
+            <article class="scan-provider">
+              <h3>OneRep Free Scan</h3>
+              <p>Checks people-search exposure and provides a basic free visibility report.</p>
+              <a href="https://onerep.com/" target="_blank" rel="noopener noreferrer">Open OneRep</a>
+            </article>
+            <article class="scan-provider">
+              <h3>DeleteMe Free Scan</h3>
+              <p>Runs a free broker exposure scan and summarizes where personal details appear.</p>
+              <a href="https://joindeleteme.com/scan-free/" target="_blank" rel="noopener noreferrer">Open DeleteMe Scan</a>
+            </article>
+            <article class="scan-provider">
+              <h3>Privacy Bee Free Scan</h3>
+              <p>Quickly checks digital footprint exposure and gives free monitoring visibility.</p>
+              <a href="https://privacybee.com/" target="_blank" rel="noopener noreferrer">Open Privacy Bee</a>
+            </article>
+            <article class="scan-provider">
+              <h3>Malwarebytes Data Remover</h3>
+              <p>Provides personal data exposure checks and data broker coverage options.</p>
+              <a href="https://www.malwarebytes.com/personal-data-remover" target="_blank" rel="noopener noreferrer">Open Malwarebytes</a>
+            </article>
+            <article class="scan-provider">
+              <h3>MyDataRemoval Free Scan</h3>
+              <p>Offers free scan results to show where personal data is exposed across broker sites.</p>
+              <a href="https://www.mydataremoval.com/" target="_blank" rel="noopener noreferrer">Open MyDataRemoval</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="removalView" class="view-section hidden" aria-labelledby="removalHeading">
+        <div class="removal-section">
+          <div class="removal-hero">
+            <h2 id="removalHeading">Start With The Major Broker Networks</h2>
+            <p>
+              Use this as the removal order: start with parent companies, then check the large independent brokers,
+              then recheck the free scraping engines that republish profile data.
+            </p>
+          </div>
+
+          <div class="removal-grid">
+            <article class="removal-card priority-card">
+              <span class="card-rank">01</span>
+              <h3>PeopleConnect, Inc.</h3>
+              <p>The biggest public-data broker group here. It covers Intelius, Instant Checkmate, TruthFinder, US Search, and related brands.</p>
+              <div class="broker-links">
+                <a href="https://suppression.peopleconnect.us/privacy-center" target="_blank" rel="noopener noreferrer">PeopleConnect</a>
+                <a href="https://app.intelius.com/privacy-center/" target="_blank" rel="noopener noreferrer">Intelius</a>
+                <a href="https://app.truthfinder.com/privacy-center/" target="_blank" rel="noopener noreferrer">TruthFinder</a>
+                <a href="https://app.instantcheckmate.com/privacy-center/" target="_blank" rel="noopener noreferrer">Instant Checkmate</a>
+              </div>
+            </article>
+            <article class="removal-card">
+              <span class="card-rank">02</span>
+              <h3>Inflection Risk Solutions</h3>
+              <p>BeenVerified, PeopleLooker, and NeighborWho-style products focus on contact details, property records, and identity reports.</p>
+              <div class="broker-links">
+                <a href="https://www.beenverified.com/app/optout/search" target="_blank" rel="noopener noreferrer">BeenVerified</a>
+                <a href="https://www.peoplelooker.com/optout" target="_blank" rel="noopener noreferrer">PeopleLooker</a>
+                <a href="https://www.neighborwho.com/svc/optout/search/optouts" target="_blank" rel="noopener noreferrer">NeighborWho</a>
+              </div>
+            </article>
+            <article class="removal-card">
+              <span class="card-rank">03</span>
+              <h3>Independent Powerhouses</h3>
+              <p>Whitepages, Spokeo, and PeopleFinders run major directories with heavy traffic and separate opt-out paths.</p>
+              <div class="broker-links">
+                <a href="https://www.whitepages.com/privacy/consumer-rights" target="_blank" rel="noopener noreferrer">Whitepages</a>
+                <a href="https://www.spokeo.com/optout" target="_blank" rel="noopener noreferrer">Spokeo</a>
+                <a href="https://www.peoplefinders.com/opt-out" target="_blank" rel="noopener noreferrer">PeopleFinders</a>
+              </div>
+            </article>
+            <article class="removal-card">
+              <span class="card-rank">04</span>
+              <h3>Fast & Free Scraping Engines</h3>
+              <p>TruePeopleSearch, FastPeopleSearch, and Radaris often show profile details quickly without an account.</p>
+              <div class="broker-links">
+                <a href="https://www.truepeoplesearch.com/removal" target="_blank" rel="noopener noreferrer">TruePeopleSearch</a>
+                <a href="https://www.fastpeoplesearch.com/removal" target="_blank" rel="noopener noreferrer">FastPeopleSearch</a>
+                <a href="https://radaris.com/control-privacy" target="_blank" rel="noopener noreferrer">Radaris</a>
+              </div>
+            </article>
+          </div>
+
+          <div class="alias-panel">
+            <div>
+              <p class="section-kicker">Email safety</p>
+              <h3>Use A Separate Inbox Or Alias</h3>
+              <p>
+                Some opt-out forms require confirmation links. A forwarding alias is usually better than a throwaway
+                inbox because you can still receive follow-up messages later.
+              </p>
+            </div>
+            <div class="temp-mail-list">
+              <a href="https://temp-mail.org/" target="_blank" rel="noopener noreferrer">Temp Mail</a>
+              <a href="https://tmailor.com/" target="_blank" rel="noopener noreferrer">Tmailor</a>
+              <a href="https://nukemail.app/" target="_blank" rel="noopener noreferrer">NukeMail</a>
+              <a href="https://www.tempmail.co/" target="_blank" rel="noopener noreferrer">TempMail.co</a>
+              <a href="https://www.mailticking.com/" target="_blank" rel="noopener noreferrer">MailTicking</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="aboutView" class="view-section hidden" aria-labelledby="aboutHeading">
+        <div class="about-section">
+          <div class="optx-intro-container">
+            <div class="optx-intro-content">
+              <img src="assets/logo.png" alt="OPTX Logo" class="optx-intro-logo">
+              <h2 id="aboutHeading">What is OPTX?</h2>
+              <p class="about-paragraph"><strong>OPTX</strong> (Online Privacy Tool eXtractor) is an Open Source
+                Intelligence assistant that helps users understand their digital footprint. It gives transparent access
+                to public telecom and data broker lookup links so you can see where personal information may be exposed.
+              </p>
+
+              <p class="about-paragraph">OPTX focuses on <strong>people search sites</strong>, data brokers that collect
+                names, addresses, phone numbers, relatives, and other personal details. Exposed data can increase the
+                risk of spam, robocalls, account takeovers, identity theft, harassment, and doxing.</p>
+
+              <p class="about-paragraph"><strong>Privacy:</strong> OPTX is a static website. Your searches are not
+                saved here, nothing is sent to an OPTX database, and there is no backend collecting your personal data.
+                Result links are generated locally in your browser.</p>
+
+              <p class="warning-note-bordered"><strong>Note:</strong> OPTX does not target employment screening,
+                tenant screening, credit reporting, or other regulated background-check services. It is focused on
+                public people-search lookup and opt-out links.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>Data is used for educational and privacy protection purposes only.</p>
+  </footer>
+
+  <script src="sites.js?v=20260610-2" defer></script>
+  <script src="script.js?v=20260610-2" defer></script>
+</body>
+
+</html>
