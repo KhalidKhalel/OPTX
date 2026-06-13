@@ -5,16 +5,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description"
-    content="OPTX is a static OSINT assistant for opening public phone lookup and opt-out links." />
+    content="OPTX is a static OSINT assistant for phone lookup, reverse image search, and opt-out links." />
   <meta name="theme-color" content="#0c111a" />
   <meta property="og:title" content="OPTX - Online Privacy Tool eXtractor" />
   <meta property="og:description"
-    content="Static frontend OSINT assistant for public phone lookup and opt-out links." />
+    content="Static frontend OSINT assistant for phone lookup, reverse image search, and opt-out links." />
   <meta property="og:type" content="website" />
   <title>OPTX - Search</title>
   <link rel="icon" type="image/png" href="assets/logo.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link rel="stylesheet" href="style.css?v=20260610-12" />
+  <link rel="stylesheet" href="style.css?v=20260613-2" />
 </head>
 
 <body>
@@ -52,6 +52,7 @@
                 <span>Search type</span>
                 <select id="lookupType" name="lookupType">
                   <option value="phone">Phone</option>
+                  <option value="image">Image</option>
                   <option value="name" disabled>Name - Coming soon</option>
                   <option value="email" disabled>Email - Coming soon</option>
                   <option value="vin" disabled>VIN - Coming soon</option>
@@ -108,6 +109,16 @@
               <p>Offers free scan results to show where personal data is exposed across broker sites.</p>
               <a href="https://www.mydataremoval.com/" target="_blank" rel="noopener noreferrer">Open MyDataRemoval</a>
             </article>
+            <article class="scan-provider">
+              <h3>IntelTechniques Tools</h3>
+              <p>Free OSINT tool pages for telephone, email, username, name, address, image, map, domain, IP, and vehicle searches.</p>
+              <a href="https://inteltechniques.com/tools/index.html" target="_blank" rel="noopener noreferrer">Open IntelTechniques</a>
+            </article>
+            <article class="scan-provider">
+              <h3>OSINT Framework</h3>
+              <p>A free directory of OSINT resources organized by investigation category.</p>
+              <a href="https://osintframework.com/" target="_blank" rel="noopener noreferrer">Open OSINT Framework</a>
+            </article>
           </div>
         </div>
       </section>
@@ -124,7 +135,7 @@
 
           <div class="removal-grid">
             <article class="removal-card">
-              <span class="card-rank">01</span>
+              <span class="card-rank">1</span>
               <h3>PeopleConnect, Inc.</h3>
               <p>The biggest public-data broker group here. It covers Intelius, Instant Checkmate, TruthFinder, US Search, and related brands.</p>
               <div class="broker-links">
@@ -135,7 +146,7 @@
               </div>
             </article>
             <article class="removal-card">
-              <span class="card-rank">02</span>
+              <span class="card-rank">2</span>
               <h3>Inflection Risk Solutions</h3>
               <p>BeenVerified, PeopleLooker, and NeighborWho-style products focus on contact details, property records, and identity reports.</p>
               <div class="broker-links">
@@ -145,7 +156,7 @@
               </div>
             </article>
             <article class="removal-card">
-              <span class="card-rank">03</span>
+              <span class="card-rank">3</span>
               <h3>Independent Powerhouses</h3>
               <p>Whitepages, Spokeo, and PeopleFinders run major directories with heavy traffic and separate opt-out paths.</p>
               <div class="broker-links">
@@ -155,7 +166,7 @@
               </div>
             </article>
             <article class="removal-card">
-              <span class="card-rank">04</span>
+              <span class="card-rank">4</span>
               <h3>Fast & Free Scraping Engines</h3>
               <p>TruePeopleSearch, FastPeopleSearch, and Radaris often show profile details quickly without an account.</p>
               <div class="broker-links">
@@ -181,7 +192,58 @@
               <a href="https://nukemail.app/" target="_blank" rel="noopener noreferrer">NukeMail</a>
               <a href="https://www.tempmail.co/" target="_blank" rel="noopener noreferrer">TempMail.co</a>
               <a href="https://www.mailticking.com/" target="_blank" rel="noopener noreferrer">MailTicking</a>
+              <a href="https://adguard.com/en/adguard-temp-mail/overview.html" target="_blank" rel="noopener noreferrer">AdGuard Temp Mail</a>
             </div>
+          </div>
+
+          <div class="map-privacy-section">
+            <div class="map-privacy-heading">
+              <p class="section-kicker">Map privacy</p>
+              <h3>Blur Your Home From Map Imagery</h3>
+              <p>Use these for address privacy after you finish the major people-search removals.</p>
+            </div>
+
+            <div class="map-privacy-grid">
+              <article class="map-privacy-card">
+                <h3>Google Maps Street View</h3>
+                <ol class="map-steps">
+                  <li>Open your home in Google Maps and enter Street View.</li>
+                  <li>Click <strong>Report a Problem</strong> in the bottom right.</li>
+                  <li>Select <strong>My home</strong>, certify you are authorized, and upload proof of address if asked.</li>
+                  <li>Redact sensitive information from proof documents except the address and date.</li>
+                  <li>Submit the form. Google says approved blur requests are permanent.</li>
+                </ol>
+                <p class="map-note">For US residential blur requests, Google may require proof of address. Accepted uploads must be under 10 MB and in PNG, JPG, or PDF format.</p>
+                <a href="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FABC13News%2Fvideos%2F1251888536702581%2F&show_text=false&width=900&height=506&autoplay=true" target="_blank" rel="noopener noreferrer">Watch video walkthrough</a>
+              </article>
+
+              <article class="map-privacy-card">
+                <h3>Apple Maps Look Around</h3>
+                <p class="map-note">Email Apple Maps at <a href="mailto:MapsImageCollection@apple.com">MapsImageCollection@apple.com</a> and request that your home imagery be obscured.</p>
+                <div class="template-fields">
+                  <label>
+                    <span>Full name</span>
+                    <input id="appleMapsFullName" type="text" placeholder="Full name" autocomplete="name" data-template-input>
+                  </label>
+                  <label>
+                    <span>Address</span>
+                    <input id="appleMapsAddress" type="text" placeholder="Home address" autocomplete="street-address" data-template-input>
+                  </label>
+                  <label>
+                    <span>Phone number</span>
+                    <input id="appleMapsPhone" type="tel" placeholder="Phone number" autocomplete="tel" data-template-input>
+                  </label>
+                </div>
+                <textarea id="appleMapsTemplate" class="template-output" readonly></textarea>
+                <div class="template-actions">
+                  <button type="button" class="template-copy" data-template-target="appleMapsTemplate">Copy Template</button>
+                  <a id="appleMapsDraftLink" href="mailto:MapsImageCollection@apple.com?subject=Privacy%20Request%3A%20Obscure%20Home%20Imagery" target="_blank" rel="noopener noreferrer">Open Email Draft</a>
+                </div>
+              </article>
+            </div>
+            <p class="privacy-resource-line">
+              For robocall reduction, use the official <a href="https://donotcall.gov/" target="_blank" rel="noopener noreferrer">National Do Not Call Registry</a>.
+            </p>
           </div>
         </div>
       </section>
@@ -216,11 +278,15 @@
   </div>
 
   <footer>
-    <p>Data is used for educational and privacy protection purposes only.</p>
+    <p>
+      Data is used for educational and privacy protection purposes only.
+      Built by <a class="portfolio-credit" href="https://www.khalidkhalel.com/" target="_blank"
+        rel="noopener noreferrer">Khalid Khalel</a>.
+    </p>
   </footer>
 
-  <script src="sites.js?v=20260610-12" defer></script>
-  <script src="script.js?v=20260610-12" defer></script>
+  <script src="sites.js?v=20260613-2" defer></script>
+  <script src="script.js?v=20260613-2" defer></script>
 </body>
 
 </html>
