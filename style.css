@@ -206,6 +206,7 @@ header {
   grid-template-columns: minmax(142px, 0.42fr) minmax(0, 2fr) 3.4rem;
   gap: 0.65rem;
   align-items: start;
+  min-width: 0;
 }
 
 .lookup-controls-image {
@@ -217,6 +218,7 @@ header {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  min-width: 0;
   color: var(--muted);
   font-size: 0.74rem;
   font-weight: 700;
@@ -228,12 +230,15 @@ header {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 0.65rem;
+  min-width: 0;
 }
 
 .lookup-type-control select,
 .lookup-field input,
 .lookup-field select {
+  width: 100%;
   min-width: 0;
+  max-width: 100%;
   min-height: 3.15rem;
   padding: 0.82rem 0.95rem;
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -247,9 +252,14 @@ header {
 }
 
 .lookup-field input[type='file'] {
+  display: block;
+  inline-size: 100%;
   padding: 0.45rem 0.65rem;
   color: var(--muted);
   cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .lookup-field input[type='file']::file-selector-button {
@@ -1683,6 +1693,18 @@ footer p {
 
   .lookup-fields {
     grid-template-columns: 1fr;
+  }
+
+  .lookup-field input[type='file'] {
+    padding-inline: 0.5rem;
+    font-size: 0.86rem;
+  }
+
+  .lookup-field input[type='file']::file-selector-button,
+  .lookup-field input[type='file']::-webkit-file-upload-button {
+    margin-right: 0.45rem;
+    padding-inline: 0.62rem;
+    font-size: 0.78rem;
   }
 
   th:nth-child(1),
